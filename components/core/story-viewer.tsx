@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Repeat, Share2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Repeat, Share2, X } from "lucide-react";
 import Image from "next/image";
 import { Icons } from "@/assets/icons";
 import { useStoryState } from "@/hooks/use-story-state";
@@ -141,12 +141,16 @@ export function StoryViewer({ stories }: StoryViewerProps) {
             <div className="flex gap-2 nav-buttons z-10">
               {currentIndex > 0 && (
                 <div
-                  className={`px-3 py-1 text-center text-sm flex items-center justify-center ${storyStyles.counterBg} rounded-full`}
+                  className="px-3 py-1 text-center text-sm flex items-center justify-center rounded-full"
+                  style={{ backgroundColor: storyStyles.bgColor }}
                 >
-                  <span className={storyStyles.counterTextPrimary}>
+                  <span style={{ color: storyStyles.primaryColor }}>
                     {currentIndex} /
                   </span>{" "}
-                  <span className={`ml-1 ${storyStyles.counterTextSecondary}`}>
+                  <span
+                    className="ml-1"
+                    style={{ color: storyStyles.secondaryColor }}
+                  >
                     {stories.length || 0}
                   </span>
                 </div>
@@ -155,20 +159,25 @@ export function StoryViewer({ stories }: StoryViewerProps) {
               {stories[currentIndex]?.isShare && showShareButton && (
                 <button
                   onClick={() => setShareModalOpen(true)}
-                  className="rounded-full bg-white/10 p-2 w-8 flex items-center justify-center h-8"
+                  className="rounded-full p-2 w-8 flex items-center justify-center h-8"
+                  style={{ backgroundColor: storyStyles.buttonBg }}
                 >
-                  <Share2 className="text-white w-4 h-4" />
+                  <Share2
+                    className="w-4 h-4"
+                    style={{ color: storyStyles.buttonIconColor }}
+                  />
                 </button>
               )}
               {publicKey && (
                 <button
-                  className="rounded-full  bg-white/10 p-2 w-8 flex items-center justify-center h-8"
+                  className="rounded-full p-2 w-8 flex items-center justify-center h-8"
+                  style={{ backgroundColor: storyStyles.buttonBg }}
                   onClick={() => {
                     setPublicKey(null);
                     resetToStart(true);
                   }}
                 >
-                  <Icons.Close />
+                  <X style={{ color: storyStyles.buttonIconColor }} />
                 </button>
               )}
             </div>

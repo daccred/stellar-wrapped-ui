@@ -7,7 +7,7 @@ import { TransactionCount } from "./screens/transaction-count";
 import { NetPosition } from "./screens/net-position";
 import { TopProtocols } from "./screens/top-protocols";
 import { LargestTransaction } from "./screens/largest-transaction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IntroScreen } from "./screens/intro-screen";
 import { FrequentWallet } from "./screens/frequent-wallet";
 import { ProfitLoss } from "./screens/profile-loss";
@@ -30,10 +30,28 @@ import {
   tokenRatioData,
 } from "@/utlis/static";
 import { Thanks } from "./screens/thanks";
+import { UniqueWalletTransfers } from "./screens/unique-wallet-transfers";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { LoaderFallback } from "@/components/core/loader-fallback";
 
 export default function HomePage() {
+  const { isFetching } = usePublicKey();
+  // get the user data from this context after fetching the data
+  const [isClient, setIsClient] = useState<boolean>(false);
   const [username] = useState("");
 
+  const walletData = {
+    totalWallets: 63,
+    sentWallets: 41,
+    receivedWallets: 34,
+    topWallets: [
+      "GABCD4...567890",
+      "G09B7D...32FED",
+      "G5678A...76543P",
+      "GAABCD...56789M",
+      "GABC12...90DEF0",
+    ],
+  };
   // Mock data based on the design
   const frequentWallets = [
     {
@@ -318,6 +336,13 @@ export default function HomePage() {
       excludeScreenshot: false,
     },
     {
+      id: "unique-wallet-transfers",
+      component: <UniqueWalletTransfers {...walletData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
       id: "top-protocols",
       component: <TopProtocols protocols={protocols} />,
       requiresPublicKey: true,
@@ -416,6 +441,15 @@ export default function HomePage() {
       excludeScreenshot: false,
     },
   ];
+
+  // Ensure the component is running on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient || isFetching) {
+    return <LoaderFallback />;
+  }
 
   return <StoryViewer stories={stories} />;
 }

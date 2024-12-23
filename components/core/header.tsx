@@ -19,7 +19,7 @@ export function StoryHeader({
   return (
     <div className={cn("relative z-50", className)}>
       <motion.h1
-        className="text-4xl sm:text-[40px] font-bold font-schabo text-current mb-2 sm:mb-4 mt-16"
+        className="text-4xl sm:text-[40px] font-bold font-schabo text-current tracking-wide mb-2 sm:mb-4 mt-16"
         initial={{ x: 1000, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}

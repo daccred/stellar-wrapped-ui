@@ -1,18 +1,22 @@
 export function getStoryStyles(index: number) {
   // Indices that should use the dark theme
-  const darkThemeIndices = [1, 2, 6, 8, 10, 12, 16, 18];
+  const darkThemeIndices = [1, 2, 6, 9, 11, 13, 17, 19];
 
   if (darkThemeIndices.includes(index)) {
     return {
-      counterBg: "bg-white/10",
-      counterTextPrimary: "text-white",
-      counterTextSecondary: "text-muted-foreground",
+      bgColor: "rgba(255, 255, 255, 0.1)",
+      primaryColor: "#FFFFFF",
+      secondaryColor: "#505050",
+      buttonBg: "rgba(255, 255, 255, 0.1)",
+      buttonIconColor: "#FFFFFF",
     };
   }
 
   return {
-    counterBg: "bg-muted/10",
-    counterTextPrimary: "text-muted",
-    counterTextSecondary: "text-[#111111]/50",
+    bgColor: "rgba(194, 191, 178, 0.1)",
+    primaryColor: "#0F0F0F",
+    secondaryColor: "rgba(17, 17, 17, 0.5)",
+    buttonBg: "rgba(194, 191, 178, 0.1)",
+    buttonIconColor: "#0F0F0F",
   };
 }

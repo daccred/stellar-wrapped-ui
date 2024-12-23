@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { BaseScene } from "./base-scene";
+import { StoryHeader } from "@/components/core/header";
 
 interface UniqueWalletTransfersProps {
   totalWallets: number;
@@ -17,21 +18,16 @@ export function UniqueWalletTransfers({
   topWallets,
 }: UniqueWalletTransfersProps) {
   return (
-    <BaseScene className="bg-gradient-to-b from-purple-300 to-purple-200 p-6">
+    <BaseScene
+      backgroundImage="/backgrounds/purple-bg.png"
+      className="text-muted"
+    >
       <div className="w-full max-w-md space-y-6">
-        <motion.div
-          className="space-y-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <h1 className="text-4xl font-bold text-black">
-            UNIQUE WALLET TRANSFERS
-          </h1>
-
-          <div className="bg-yellow-300 text-black px-3 py-1 rounded-full inline-block">
-            Total Unique Wallets Interacted With: {totalWallets}
-          </div>
-        </motion.div>
+        <StoryHeader
+          title="UNIQUE WALLET TRANSFERS"
+          chip={`Total Unique Wallets Interacted With: ${totalWallets}`}
+          chipDisplay="chip"
+        />
 
         <motion.div
           className="space-y-4"
@@ -40,33 +36,38 @@ export function UniqueWalletTransfers({
           transition={{ delay: 0.2 }}
         >
           <div className="space-y-1">
-            <div className="text-gray-600">Wallets Sent To</div>
-            <div className="text-xl font-medium">
+            <div className="text-muted-foreground text-xs">Wallets Sent To</div>
+            <div className="text-base font-medium">
               {sentWallets} Unique Wallets
             </div>
           </div>
 
           <div className="space-y-1">
-            <div className="text-gray-600">Wallets Received From</div>
-            <div className="text-xl font-medium">
+            <div className="text-muted-foreground text-xs">
+              Wallets Received From
+            </div>
+            <div className="text-base font-medium">
               {receivedWallets} Unique Wallets
             </div>
           </div>
         </motion.div>
 
         <motion.div
-          className="bg-white rounded-xl p-4 space-y-4"
+          className="bg-white border border-black rounded-2xl py-4 space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <h2 className="font-medium">Breakdown</h2>
-          <div className="text-sm text-gray-600">
-            Top 5 Wallets You Interacted With:
+          <div className="border-b border-black px-4 pb-4 space-y-1">
+            <h2 className="font-medium">Breakdown</h2>
+            <span className="text-sm text-muted-foreground">
+              {" "}
+              Top 5 Wallets You Interacted With:
+            </span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 px-4">
             {topWallets.map((wallet, index) => (
-              <div key={wallet} className="font-mono text-sm">
+              <div key={wallet} className="text-xs">
                 {index + 1}. {wallet}
               </div>
             ))}
