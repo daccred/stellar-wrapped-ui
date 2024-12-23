@@ -19,7 +19,7 @@ export function StoryHeader({
   return (
     <div className={cn("relative z-50", className)}>
       <motion.h1
-        className="text-4xl sm:text-[40px] font-bold font-schabo text-current mb-2 sm:mb-4 mt-16"
+        className="text-4xl sm:text-[40px] font-bold font-schabo text-current tracking-wide mb-2 sm:mb-4 mt-16"
         initial={{ x: 1000, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -30,9 +30,9 @@ export function StoryHeader({
       {chip && chipDisplay !== "none" && (
         <motion.div
           className={cn(
-            "mb-8 sm:text-base text-sm font-medium",
+            "mb-8 sm:text-base text-sm",
             chipDisplay === "chip"
-              ? "inline-block bg-[#FDDA24] text-[#0F0F0F] px-3 py-1 rounded-full w-fit"
+              ? "inline-block font-medium bg-primary text-[#0F0F0F] px-3 py-1 rounded-full w-fit"
               : "text-current"
           )}
           initial={{ x: 1500, opacity: 0 }}

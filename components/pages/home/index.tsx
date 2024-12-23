@@ -7,7 +7,7 @@ import { TransactionCount } from "./screens/transaction-count";
 import { NetPosition } from "./screens/net-position";
 import { TopProtocols } from "./screens/top-protocols";
 import { LargestTransaction } from "./screens/largest-transaction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IntroScreen } from "./screens/intro-screen";
 import { FrequentWallet } from "./screens/frequent-wallet";
 import { ProfitLoss } from "./screens/profile-loss";
@@ -17,23 +17,54 @@ import { ActiveLPs } from "./screens/active-lps";
 import { NFTSpending } from "./screens/nft-spending";
 import { TimeOnChain } from "./screens/time-on-chain";
 import { FirstTransaction } from "./screens/first-transaction";
+import { AnchorProtocolRanking } from "./screens/anchor-protocol-ranking";
+import { RepeatInteractions } from "./screens/repeat-interactions";
+import { TokenBuySellRatios } from "./screens/token-buy-sell-ratios";
+import { StakingRewards } from "./screens/staking-rewards";
+import { CrossChainActivity } from "./screens/cross-chain-activity";
+import {
+  crossChainData,
+  interactionData,
+  protocolData,
+  stakingData,
+  tokenRatioData,
+} from "@/utlis/static";
+import { Thanks } from "./screens/thanks";
+import { UniqueWalletTransfers } from "./screens/unique-wallet-transfers";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { LoaderFallback } from "@/components/core/loader-fallback";
 
 export default function HomePage() {
-  const [username] = useState("")
+  const { isFetching } = usePublicKey();
+  // get the user data from this context after fetching the data
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const [username] = useState("");
 
-   // Mock data based on the design
-   const frequentWallets = [
+  const walletData = {
+    totalWallets: 63,
+    sentWallets: 41,
+    receivedWallets: 34,
+    topWallets: [
+      "GABCD4...567890",
+      "G09B7D...32FED",
+      "G5678A...76543P",
+      "GAABCD...56789M",
+      "GABC12...90DEF0",
+    ],
+  };
+  // Mock data based on the design
+  const frequentWallets = [
     {
       address: "GABCD4...567890",
       totalTransactions: 15,
-      totalAmount: 8200
+      totalAmount: 8200,
     },
     {
       address: "GABCD4...567890",
       totalTransactions: 12,
-      totalAmount: 5100
-    }
-  ]
+      totalAmount: 5100,
+    },
+  ];
 
   const protocols = [
     { name: "cables", usage: 30, icon: "/icons/cables.png" },
@@ -42,8 +73,8 @@ export default function HomePage() {
     { name: "Soroswap", usage: 40, icon: "/icons/soroswap.png" },
     { name: "FxDAO", usage: 20, icon: "/icons/fxdao.png" },
     { name: "Lumenswap", usage: 62, icon: "/icons/lumenswap.png" },
-    { name: "Blend", usage: 70, icon: "/icons/blend.png" }
-  ]
+    { name: "Blend", usage: 70, icon: "/icons/blend.png" },
+  ];
 
   const pnlData = {
     overallPnl: 7250,
@@ -53,22 +84,22 @@ export default function HomePage() {
         icon: "/icons/usdc.png",
         amount: 3500,
         percentageChange: 10,
-        quantity: 2
+        quantity: 2,
       },
       {
         symbol: "AQUA",
         icon: "/icons/aqua.png",
         amount: 2000,
         percentageChange: 15,
-        quantity: 5000
+        quantity: 5000,
       },
       {
         symbol: "XLM",
         icon: "/icons/xlm.png",
         amount: 5300,
         percentageChange: 25,
-        quantity: 5000
-      }
+        quantity: 5000,
+      },
     ],
     worstPerformers: [
       {
@@ -76,10 +107,10 @@ export default function HomePage() {
         icon: "/icons/xrf.png",
         amount: 1000,
         percentageChange: -8,
-        quantity: 20000
-      }
-    ]
-  }
+        quantity: 20000,
+      },
+    ],
+  };
 
   const holdingData = {
     averageDuration: 9.75,
@@ -87,22 +118,23 @@ export default function HomePage() {
       { symbol: "USDC", icon: "/icons/usdc.png", duration: 18 },
       { symbol: "YBX", icon: "/icons/ybx.png", duration: 12 },
       { symbol: "XLM", icon: "/icons/xlm.png", duration: 6 },
-      { symbol: "EURT", icon: "/icons/eurt.png", duration: 3 }
+      { symbol: "EURT", icon: "/icons/eurt.png", duration: 3 },
     ],
     gasFees: {
       actual: 450,
       savings: 30,
-      optimizations: "Batch transactions and gas-efficient protocols like Arbitrum. USDC"
-    }
-  }
+      optimizations:
+        "Batch transactions and gas-efficient protocols like Arbitrum. USDC",
+    },
+  };
 
   const transactionCategories = [
-    { name: 'Swaps', count: 45 },
-    { name: 'Token Transfers', count: 20 },
-    { name: 'NFT Transactions', count: 25 },
-    { name: 'Staking', count: 10 },
-    { name: 'DeFi Interactions', count: 12 }
-  ]
+    { name: "Swaps", count: 45 },
+    { name: "Token Transfers", count: 20 },
+    { name: "NFT Transactions", count: 25 },
+    { name: "Staking", count: 10 },
+    { name: "DeFi Interactions", count: 12 },
+  ];
 
   const lpData = {
     pools: [
@@ -112,12 +144,12 @@ export default function HomePage() {
         totalStaked: {
           amount: 5000,
           token: "USDC",
-          profitLoss: "+3 ETH"
+          profitLoss: "+3 ETH",
         },
         stats: {
           fee: "0.3%",
-          apy: "18%"
-        }
+          apy: "18%",
+        },
       },
       {
         name: "MATIC/USDC Pool (SushiSwap)",
@@ -125,11 +157,11 @@ export default function HomePage() {
         totalStaked: {
           amount: 2000,
           token: "MATIC",
-          profitLoss: "+1,000 USDC"
+          profitLoss: "+1,000 USDC",
         },
         stats: {
-          apy: "22%"
-        }
+          apy: "22%",
+        },
       },
       {
         name: "BTC/USDT Pool (Curve Finance)",
@@ -137,16 +169,15 @@ export default function HomePage() {
         totalStaked: {
           amount: 0.2,
           token: "BTC",
-          profitLoss: "+5,000 USDT"
+          profitLoss: "+5,000 USDT",
         },
         stats: {
-          apy: "10%"
-        }
-      }
+          apy: "10%",
+        },
+      },
     ],
-    poolCount: 3
-  }
-
+    poolCount: 3,
+  };
 
   const nftData = {
     totalSpent: 18500,
@@ -154,7 +185,7 @@ export default function HomePage() {
       { name: "Art", amount: 8000, percentage: 43 },
       { name: "Gaming", amount: 5000, percentage: 27 },
       { name: "PFP", amount: 3500, percentage: 19 },
-      { name: "Metaverse Assets", amount: 2000, percentage: 11 }
+      { name: "Metaverse Assets", amount: 2000, percentage: 11 },
     ],
     bestProfit: {
       name: "CryptoDoodle #245",
@@ -163,9 +194,9 @@ export default function HomePage() {
       salePrice: 5000,
       profit: 3800,
       saleDate: "October 15, 2023",
-      transactionHash: "0xabcdef0567890234"
-    }
-  }
+      transactionHash: "0xabcdef0567890234",
+    },
+  };
 
   const timeData = {
     activationDate: "January 15, 2021",
@@ -174,20 +205,20 @@ export default function HomePage() {
       {
         name: "First DeFi Interaction",
         date: "March 20, 2021",
-        details: "Staking on Uniswap"
+        details: "Staking on Uniswap",
       },
       {
         name: "First NFT Purchase",
         date: "June 5, 2021",
-        details: "CryptoDoodles #245"
+        details: "CryptoDoodles #245",
       },
       {
         name: "First Cross-Chain Transfer",
         date: "August 12, 2022",
-        details: "ETH to Polygon Bridge"
-      }
-    ]
-  }
+        details: "ETH to Polygon Bridge",
+      },
+    ],
+  };
 
   const firstTransactionData = {
     date: "January 15, 2021",
@@ -196,9 +227,9 @@ export default function HomePage() {
       amount: "500 USDC",
       hash: "0x1234abc567890def",
       sourceAddress: "Centralized Exchange Wallet",
-      gasFee: "5 USDC"
-    }
-  }
+      gasFee: "5 USDC",
+    },
+  };
 
   const tokenData = [
     {
@@ -207,7 +238,7 @@ export default function HomePage() {
       amount: "2 ETH",
       value: "~6,800 USDC",
       icon: "/icons/usdc.png",
-      color: "#2775CA"
+      color: "#2775CA",
     },
     {
       symbol: "MATIC",
@@ -215,7 +246,7 @@ export default function HomePage() {
       amount: "5,000 MATIC",
       value: "~4,250 USDC",
       icon: "/icons/matic.png",
-      color: "#8247E5"
+      color: "#8247E5",
     },
     {
       symbol: "DOGE",
@@ -223,7 +254,7 @@ export default function HomePage() {
       amount: "20,000 DOGE",
       value: "~2,550 USDC",
       icon: "/icons/doge.png",
-      color: "#BA9F33"
+      color: "#BA9F33",
     },
     {
       symbol: "USDT",
@@ -231,35 +262,34 @@ export default function HomePage() {
       amount: "5,000 USDT",
       value: "~5,000 USDC",
       icon: "/icons/usdt.png",
-      color: "#26A17B"
-    }
-  ]
-
+      color: "#26A17B",
+    },
+  ];
 
   const stories = [
     {
-      id: 'wallet-input',
+      id: "wallet-input",
       component: <WalletInput />,
       isShare: false,
       requiresPublicKey: false,
       excludeScreenshot: true,
     },
     {
-      id: 'intro',
+      id: "intro",
       component: <IntroScreen />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: true,
     },
     {
-      id: 'welcome',
+      id: "welcome",
       component: <WelcomeMessage username={username} />,
       requiresPublicKey: true,
       isShare: false,
       excludeScreenshot: true,
     },
     {
-      id: 'largest-transaction',
+      id: "largest-transaction",
       component: (
         <LargestTransaction
           amount={42000}
@@ -268,7 +298,7 @@ export default function HomePage() {
           mostActiveDay={{
             date: "8/5/2023",
             totalTransactions: 28,
-            totalVolume: 7300
+            totalVolume: 7300,
           }}
         />
       ),
@@ -277,20 +307,16 @@ export default function HomePage() {
       excludeScreenshot: false,
     },
     {
-      id: 'net-position',
+      id: "net-position",
       component: (
-        <NetPosition
-          sent={20300}
-          received={15600}
-          netPosition={-4700}
-        />
+        <NetPosition sent={20300} received={15600} netPosition={-4700} />
       ),
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'transaction-count',
+      id: "transaction-count",
       component: (
         <TransactionCount
           totalCount={112}
@@ -303,70 +329,127 @@ export default function HomePage() {
       excludeScreenshot: false,
     },
     {
-      id: 'frequent-wallet',
+      id: "frequent-wallet",
       component: <FrequentWallet wallets={frequentWallets} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'top-protocols',
+      id: "unique-wallet-transfers",
+      component: <UniqueWalletTransfers {...walletData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "top-protocols",
       component: <TopProtocols protocols={protocols} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'profit-loss',
+      id: "profit-loss",
       component: <ProfitLoss {...pnlData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'holding-duration',
+      id: "holding-duration",
       component: <HoldingDuration {...holdingData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'token-ownership',
+      id: "token-ownership",
       component: <TokenOwnership tokens={tokenData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'active-lps',
+      id: "active-lps",
       component: <ActiveLPs {...lpData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'nft-spending',
+      id: "nft-spending",
       component: <NFTSpending {...nftData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'time-on-chain',
+      id: "time-on-chain",
       component: <TimeOnChain {...timeData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
-      id: 'first-transaction',
+      id: "first-transaction",
       component: <FirstTransaction {...firstTransactionData} />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
-    }
-  ]
+    },
+    {
+      id: "anchor-protocol-ranking",
+      component: <AnchorProtocolRanking {...protocolData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "repeat-interactions",
+      component: <RepeatInteractions data={interactionData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "token-buy-sell-ratios",
+      component: <TokenBuySellRatios {...tokenRatioData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "staking-rewards",
+      component: <StakingRewards {...stakingData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "cross-chain-activity",
+      component: <CrossChainActivity {...crossChainData} />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "thanks",
+      component: <Thanks />,
+      requiresPublicKey: true,
+      isShare: false,
+      excludeScreenshot: false,
+    },
+  ];
 
+  // Ensure the component is running on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient || isFetching) {
+    return <LoaderFallback />;
+  }
 
   return <StoryViewer stories={stories} />;
 }

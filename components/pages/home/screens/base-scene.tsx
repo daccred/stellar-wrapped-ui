@@ -19,7 +19,7 @@ export function BaseScene({
 }: BaseSceneProps) {
   return (
     <motion.div
-      className={`relative w-full h-full ${className}`}
+      className="relative w-full h-full"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 1.05 }}
@@ -27,11 +27,17 @@ export function BaseScene({
     >
       {backgroundImage && (
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
         />
       )}
-      <div className={cn("w-full relative z-10 h-full flex flex-col items-center p-4", {"justify-center" : isCenter})}>
+      <div
+        className={cn(
+          "w-full relative z-10 h-full flex flex-col items-center p-4",
+          { "justify-center": isCenter },
+          className
+        )}
+      >
         {children}
       </div>
     </motion.div>

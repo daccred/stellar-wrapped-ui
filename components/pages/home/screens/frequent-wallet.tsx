@@ -16,8 +16,8 @@ interface FrequentWalletProps {
 
 export function FrequentWallet({ wallets }: FrequentWalletProps) {
   return (
-    <BaseScene 
-      backgroundImage="/backgrounds/welcome-bg.png"
+    <BaseScene
+      backgroundImage="/backgrounds/black-grunge-bg.png"
       className=" text-white"
     >
       <div className="w-full max-w-md space-y-8 mt-16">
@@ -37,25 +37,35 @@ export function FrequentWallet({ wallets }: FrequentWalletProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.2 }}
           >
-            <div className={cn("space-y-3 pb-4", {"border-b-[#505050] border-b": index ===0})}>
-              <div className="text-[#FDDA24]">Most Received From Wallet:</div>
+            <div
+              className={cn("space-y-3 pb-4", {
+                "border-b-muted-foreground border-b": index === 0,
+              })}
+            >
+              <div className="text-primary">Most Received From Wallet:</div>
               <div className="space-y-1">
-                <div className="text-[#505050]">Wallet Address</div>
-                <div className="font-semibold text-[#CCCCCC]">{wallet.address}</div>
+                <div className="text-muted-foreground">Wallet Address</div>
+                <div className="font-semibold text-foreground">
+                  {wallet.address}
+                </div>
               </div>
               <div className="space-y-1">
-                <div className="text-[#505050]">Total Transactions</div>
-                <div className="font-semibold text-[#CCCCCC]">{wallet.totalTransactions}</div>
+                <div className="text-muted-foreground">Total Transactions</div>
+                <div className="font-semibold text-foreground">
+                  {wallet.totalTransactions}
+                </div>
               </div>
               <div className="space-y-1">
-                <div className="text-[#505050]">Total Amount Sent</div>
-                <div className="font-semibold text-[#CCCCCC]">{wallet.totalAmount.toLocaleString()} USDC</div>
+                <div className="text-muted-foreground">Total Amount Sent</div>
+                <div className="font-semibold text-foreground">
+                  {wallet.totalAmount.toLocaleString()} USDC
+                </div>
               </div>
             </div>
           </motion.div>
         ))}
       </div>
     </BaseScene>
-  )
+  );
 }
 
