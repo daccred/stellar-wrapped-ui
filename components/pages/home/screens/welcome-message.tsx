@@ -11,7 +11,7 @@ export function WelcomeMessage({ username }: WelcomeMessageProps) {
   return (
     <div className="relative h-full w-full flex flex-col items-start justify-center overflow-hidden px-4">
       <Image
-        src="/backgrounds/welcome-bg.png"
+        src="/backgrounds/black-grunge-bg.png"
         alt="Intro Bg"
         width={240}
         height={80}
@@ -21,7 +21,7 @@ export function WelcomeMessage({ username }: WelcomeMessageProps) {
       {/* <div
         className="absolute inset-0 overflow-hidden"
         style={{
-          backgroundImage: `url('/backgrounds/welcome-bg.png')`,
+          backgroundImage: `url('/backgrounds/black-grunge-bg.png')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% auto",
         }}

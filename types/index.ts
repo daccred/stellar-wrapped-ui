@@ -1,5 +1,5 @@
 export interface UserData {
-    account: string;
+  account: string;
   createdAt: string;
   first_transaction_date: string;
   isMissing: boolean;

@@ -30,9 +30,9 @@ export function StoryHeader({
       {chip && chipDisplay !== "none" && (
         <motion.div
           className={cn(
-            "mb-8 sm:text-base text-sm font-medium",
+            "mb-8 sm:text-base text-sm",
             chipDisplay === "chip"
-              ? "inline-block bg-[#FDDA24] text-[#0F0F0F] px-3 py-1 rounded-full w-fit"
+              ? "inline-block font-medium bg-primary text-[#0F0F0F] px-3 py-1 rounded-full w-fit"
               : "text-current"
           )}
           initial={{ x: 1500, opacity: 0 }}

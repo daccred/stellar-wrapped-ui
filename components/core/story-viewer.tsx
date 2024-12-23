@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "../ui/button";
 import { ShareModal } from "./share-modal";
+import { getStoryStyles } from "@/utlis";
 
 interface Story {
   id: string;
@@ -38,6 +39,7 @@ export function StoryViewer({ stories }: StoryViewerProps) {
     resetToStart,
     handleDragEnd,
   } = useStoryState(stories);
+  const storyStyles = getStoryStyles(currentIndex);
 
   useEffect(() => {
     if (stories[currentIndex]?.id === "year-stats") {
@@ -75,7 +77,7 @@ export function StoryViewer({ stories }: StoryViewerProps) {
     if (isDesktop) {
       return (
         <>
-          {currentIndex !== 0 && stories[currentIndex].id !== "welcome" && (
+          {currentIndex !== 0 && stories[currentIndex].id !== "intro" && (
             <Button
               variant="ghost"
               size="icon"
@@ -123,9 +125,8 @@ export function StoryViewer({ stories }: StoryViewerProps) {
       </>
     );
   };
-
   return (
-    <div className="fixed flex flex-col inset-0 bg-[#0F0F0F]">
+    <div className="fixed flex flex-col inset-0 bg-muted">
       <div className="relative h-full w-full max-w-md mx-auto">
         {/* Story content with ID for screenshot */}
         <div id={stories[currentIndex].id} className=" h-full w-full">
@@ -137,22 +138,31 @@ export function StoryViewer({ stories }: StoryViewerProps) {
               width={32}
               height={32}
             />
-            <div className="flex gap-2 nav-buttons">
-            <div className="px-3 py-1 text-center text-sm flex items-center justify-center bg-white/10 text-[#505050] rounded-full">
-              <span className="text-white">{currentIndex + 1} /</span> <span className="ml-1">{stories.length || 0}</span>
-            </div>
+            <div className="flex gap-2 nav-buttons z-10">
+              {currentIndex > 0 && (
+                <div
+                  className={`px-3 py-1 text-center text-sm flex items-center justify-center ${storyStyles.counterBg} rounded-full`}
+                >
+                  <span className={storyStyles.counterTextPrimary}>
+                    {currentIndex} /
+                  </span>{" "}
+                  <span className={`ml-1 ${storyStyles.counterTextSecondary}`}>
+                    {stories.length || 0}
+                  </span>
+                </div>
+              )}
 
               {stories[currentIndex]?.isShare && showShareButton && (
                 <button
                   onClick={() => setShareModalOpen(true)}
-                  className="rounded-full bg-white/10 p-2 w-10 flex items-center justify-center h-10"
+                  className="rounded-full bg-white/10 p-2 w-8 flex items-center justify-center h-8"
                 >
                   <Share2 className="text-white w-4 h-4" />
                 </button>
               )}
               {publicKey && (
                 <button
-                  className="rounded-full  bg-white/10 p-2 w-10 flex items-center justify-center h-10"
+                  className="rounded-full  bg-white/10 p-2 w-8 flex items-center justify-center h-8"
                   onClick={() => {
                     setPublicKey(null);
                     resetToStart(true);

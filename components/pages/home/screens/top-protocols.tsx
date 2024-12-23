@@ -17,11 +17,13 @@ interface TopProtocolsProps {
 
 export function TopProtocols({ protocols }: TopProtocolsProps) {
   return (
-    <BaseScene 
-      backgroundImage="/backgrounds/top-protocol-bg.png"
-    >
-      <div className="w-full">
-        <StoryHeader title="YOUR TOP PROTOCOLS" chip="You&apos;re a DEX/DeFi Power User!" chipDisplay="chip"/>
+    <BaseScene backgroundImage="/backgrounds/top-protocol-bg.png">
+      <div className="w-full text-muted">
+        <StoryHeader
+          title="YOUR TOP PROTOCOLS"
+          chip="You're a DEX/DeFi Power User!"
+          chipDisplay="chip"
+        />
 
         <div className="space-y-4">
           {protocols.map((protocol, index) => (
@@ -30,7 +32,7 @@ export function TopProtocols({ protocols }: TopProtocolsProps) {
               className="flex items-center gap-4"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 + (index * 0.1) }}
+              transition={{ delay: 0.2 + index * 0.1 }}
             >
               <Image
                 src={protocol.icon}
@@ -38,16 +40,19 @@ export function TopProtocols({ protocols }: TopProtocolsProps) {
                 width={40}
                 height={40}
                 className="rounded-xl text-sm"
+                unoptimized
               />
               <div className="flex-1">
-                <div className="font-medium text-[#0F0F0F]">{protocol.name}</div>
-                <div className="text-sm text-[#0F0F0F]/50">{protocol.usage}% of usage</div>
+                <div className="font-medium text-muted">{protocol.name}</div>
+                <div className="text-sm text-muted/50">
+                  {protocol.usage}% of usage
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
     </BaseScene>
-  )
+  );
 }
 
