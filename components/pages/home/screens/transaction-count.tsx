@@ -38,12 +38,64 @@ function formatDate(
   return new Intl.DateTimeFormat("en-US", options).format(date); // Example: "December 2024"
 }
 
+function formatNumber(
+  num: number | undefined | null
+): string | undefined | null {
+  // Handle undefined or null
+  if (num === undefined || num === null) {
+    return num; // Return undefined or null as-is
+  }
+
+  // Handle negative numbers
+  const isNegative = num < 0;
+  if (isNegative) {
+    num = -num; // Make the number positive for formatting
+  }
+
+  // Define thresholds for k, m, etc.
+  const thresholds = [
+    { value: 1_000_000_000, suffix: "b" }, // Billion
+    { value: 1_000_000, suffix: "m" }, // Million
+    { value: 1_000, suffix: "k" }, // Thousand
+  ];
+
+  // Iterate through the thresholds
+  for (let i = 0; i < thresholds.length; i++) {
+    const { value, suffix } = thresholds[i];
+    if (num >= value) {
+      const formattedNumber = (num / value).toFixed(1).replace(/\.0$/, "");
+      return isNegative
+        ? `-${formattedNumber}${suffix}`
+        : `${formattedNumber}${suffix}`;
+    }
+  }
+
+  // If the number is less than 1000, return it as-is
+  return isNegative ? `-${num}` : num.toString();
+}
+
 export function TransactionCount({
   totalCount,
   dateRange,
   categories,
 }: TransactionCountProps) {
   const { userData } = usePublicKey();
+
+  const updatedCategories = [
+    {
+      name: "Received Amount",
+      value: formatNumber(userData?.total_received_amount),
+    },
+    { name: "Sent Amount", value: formatNumber(userData?.total_sent_amount) },
+    {
+      name: "Buying Amount",
+      value: formatNumber(userData?.total_buying_amount),
+    },
+    {
+      name: "Sold Amount",
+      value: formatNumber(userData?.total_selling_amount),
+    },
+  ];
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-yellow-bg.png"
@@ -68,7 +120,7 @@ export function TransactionCount({
               stiffness: 200,
             }}
           >
-            {userData?.total_transactions}
+            {formatNumber(userData?.total_transactions)}
           </motion.div>
 
           <motion.p
@@ -89,10 +141,10 @@ export function TransactionCount({
           transition={{ delay: 0.6 }}
         >
           <h3 className="text-base font-medium pb-4 border-b px-4 border-white">
-            Transactions by Category
+            Total Transactions by Category
           </h3>
           <div className="space-y-3 px-4">
-            {categories.map((category, index) => (
+            {updatedCategories.map((category, index) => (
               <motion.div
                 key={category.name}
                 className="flex justify-between items-center text-xs"
@@ -101,7 +153,7 @@ export function TransactionCount({
                 transition={{ delay: 0.8 + index * 0.1 }}
               >
                 <span className="text-[#505050]">{category.name}</span>
-                <span className="font-semibold">{category.count}</span>
+                <span className="font-semibold">{category.value}</span>
               </motion.div>
             ))}
           </div>

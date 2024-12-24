@@ -10,6 +10,42 @@ interface NetPositionProps {
   netPosition: number;
 }
 
+function formatNumber(
+  num: number | undefined | null
+): string | undefined | null {
+  // Handle undefined or null
+  if (num === undefined || num === null) {
+    return num; // Return undefined or null as-is
+  }
+
+  // Handle negative numbers
+  const isNegative = num < 0;
+  if (isNegative) {
+    num = -num; // Make the number positive for formatting
+  }
+
+  // Define thresholds for k, m, etc.
+  const thresholds = [
+    { value: 1_000_000_000, suffix: "b" }, // Billion
+    { value: 1_000_000, suffix: "m" }, // Million
+    { value: 1_000, suffix: "k" }, // Thousand
+  ];
+
+  // Iterate through the thresholds
+  for (let i = 0; i < thresholds.length; i++) {
+    const { value, suffix } = thresholds[i];
+    if (num >= value) {
+      const formattedNumber = (num / value).toFixed(1).replace(/\.0$/, "");
+      return isNegative
+        ? `-${formattedNumber}${suffix}`
+        : `${formattedNumber}${suffix}`;
+    }
+  }
+
+  // If the number is less than 1000, return it as-is
+  return isNegative ? `-${num}` : num.toString();
+}
+
 export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
   const { userData } = usePublicKey();
   return (
@@ -56,7 +92,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
           >
             <span className="text-[#505050]">Net Position</span>
             <h3 className="text-[63px] font-schabo font-bold">
-              {userData?.net_pnl?.toLocaleString()} USDC
+              {formatNumber(userData?.net_pnl)?.toLocaleString()} USDC
             </h3>
           </motion.div>
         </div>
