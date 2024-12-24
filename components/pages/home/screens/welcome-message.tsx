@@ -23,7 +23,7 @@ function truncateString(
 
 export function WelcomeMessage({ username }: WelcomeMessageProps) {
   const { userData } = usePublicKey();
-  console.log("the user data is", userData);
+  // console.log("the user data is", userData);
   return (
     <div className="relative h-full w-full flex flex-col items-start justify-center overflow-hidden px-4">
       <Image
