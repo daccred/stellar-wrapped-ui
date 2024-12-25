@@ -4,20 +4,20 @@ import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
 
 interface TransactionCategory {
-  name: string
-  count: number
+  category: string;
+  count: number;
 }
 
 interface TransactionCountProps {
-  totalCount: number
-  dateRange: string
-  categories: TransactionCategory[]
+  totalCount: number;
+  dateRange: string;
+  categories: TransactionCategory[];
 }
 
-export function TransactionCount({ 
-  totalCount, 
+export function TransactionCount({
+  totalCount,
   dateRange,
-  categories 
+  categories,
 }: TransactionCountProps) {
   return (
     <BaseScene
@@ -68,13 +68,15 @@ export function TransactionCount({
           <div className="space-y-3 px-4">
             {categories.map((category, index) => (
               <motion.div
-                key={category.name}
+                key={index}
                 className="flex justify-between items-center text-xs"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.8 + index * 0.1 }}
               >
-                <span className="text-muted-foreground">{category.name}</span>
+                <span className="text-muted-foreground capitalize">
+                  {category.category}
+                </span>
                 <span className="font-semibold">{category.count}</span>
               </motion.div>
             ))}

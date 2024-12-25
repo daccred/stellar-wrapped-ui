@@ -1,3 +1,4 @@
+import Providers from "@/providers";
 import { Inter, Schabo } from "../utlis/font";
 import "./global.css";
 import { Metadata, Viewport } from "next";
@@ -25,7 +26,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${Inter.variable} ${Schabo.variable} font-inter`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

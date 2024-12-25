@@ -1,11 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { SUMMARY_QUERY_KEY, usePublicKey } from "@/contexts/PublicKeyContext";
 import { BaseScene } from "./base-scene";
+import { useQueryClient } from "@tanstack/react-query";
+import { SummaryService } from "@/services";
 
 const WalletInput = () => {
   const [publicKey, setPublicKey] = useState<string>("");
@@ -28,22 +29,40 @@ const WalletInput = () => {
     return stellarKeyRegex.test(key);
   };
 
+  const queryClient = useQueryClient();
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setIsLoading(true);
+
     setError("");
 
+    if (!publicKey) {
+      setError("Please enter a Stellar wallet address");
+      return;
+    }
+
+    if (!validateStellarPublicKey(publicKey)) {
+      setError("Invalid Stellar wallet address format");
+      return;
+    }
+    setIsLoading(true);
     try {
-      if (!publicKey) {
-        throw new Error("Please enter a Stellar wallet address");
+      const isValid = await SummaryService.validateWallet(publicKey);
+
+      if (!isValid) {
+        throw new Error("Unable to fetch wallet data. Please try again.");
       }
 
-      if (!validateStellarPublicKey(publicKey)) {
-        throw new Error("Invalid Stellar wallet address format");
-      }
+      // Prefetch data for the home page
+      await queryClient.prefetchQuery({
+        queryKey: [SUMMARY_QUERY_KEY, publicKey],
+        queryFn: async () => await SummaryService.getUserSummary(publicKey),
+      });
+
       setToken(publicKey);
     } catch (err: any) {
       setError(err.message);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -84,7 +103,7 @@ const WalletInput = () => {
                 onChange={(e) => setPublicKey(e.target.value)}
                 placeholder="Eg. GABC...7UXM..."
                 className={cn(
-                  "placeholder:text-[#6C6C6C] w-full px-5 py-3.5 bg-[#CBC8BB] backdrop-blur-sm rounded-full border outline-none ",
+                  "placeholder:text-[#6C6C6C] w-full px-5 py-3.5 bg-[#CBC8BB] text-muted backdrop-blur-sm rounded-full border outline-none ",
                   { "border-red-500": error },
                   { "border-white/10": !error }
                 )}

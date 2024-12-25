@@ -1,44 +1,37 @@
-"use client"
+"use client";
 
-import { motion } from 'framer-motion'
-import { BaseScene } from './base-scene'
-import { StoryHeader } from '@/components/core/header'
+import { motion } from "framer-motion";
+import { BaseScene } from "./base-scene";
+import { StoryHeader } from "@/components/core/header";
 import { useEffect, useState } from "react";
-import { Calendar } from "lucide-react";
 
-interface FirstTransactionProps {
-  first_transaction_date: string;
+interface TransactionHistoryProps {
+  last_transaction_date: string;
 }
 
-export function FirstTransaction({
-  first_transaction_date,
-}: FirstTransactionProps) {
+export function LastTransaction({
+  last_transaction_date,
+}: TransactionHistoryProps) {
   const [uniqueText, setUniqueText] = useState("");
 
   useEffect(() => {
-    const firstDate = new Date(first_transaction_date);
+    const lastDate = new Date(last_transaction_date);
     const currentDate = new Date();
-    const diffTime = Math.abs(currentDate.getTime() - firstDate.getTime());
+    const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays <= 7) {
-      setUniqueText("Your blockchain journey begins! Ready for takeoff! 🚀");
+    if (diffDays <= 1) {
+      setUniqueText("Active today! Keep that momentum going! 🚀");
+    } else if (diffDays <= 7) {
+      setUniqueText("Recent activity this week! Stay engaged! ✨");
     } else if (diffDays <= 30) {
-      setUniqueText(
-        "The start of something big! Your crypto adventure is underway! 🌟"
-      );
-    } else if (diffDays <= 180) {
-      setUniqueText("Remember this day? It's when your crypto story began! 💫");
-    } else if (diffDays <= 365) {
-      setUniqueText(
-        "From this moment, you became part of the blockchain revolution! 🚀"
-      );
+      setUniqueText("Last month's activity! Time to jump back in! 💫");
+    } else if (diffDays <= 90) {
+      setUniqueText("Been a while! The blockchain misses you! 🌟");
     } else {
-      setUniqueText(
-        "One year ago, your crypto journey began! What a first year it's been! 🎉"
-      );
+      setUniqueText("Time for a comeback! The future awaits! 🏆");
     }
-  }, [first_transaction_date]);
+  }, [last_transaction_date]);
 
   const formatDate = (date: string) => {
     const d = new Date(date);
@@ -49,19 +42,19 @@ export function FirstTransaction({
     };
   };
 
-  const firstDate = formatDate(first_transaction_date);
+  const lastDate = formatDate(last_transaction_date);
 
   return (
     <BaseScene backgroundImage="/backgrounds/home-bg.png">
       <div className="w-full max-w-xl space-y-8 text-muted">
-        <StoryHeader title="FIRST TRANSACTION" chipDisplay="chip" />
+        <StoryHeader title="LAST TRANSACTION" chipDisplay="chip" />
         <div className="w-full space-y-6 bg-black rounded-2xl p-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <h2 className="sm:text-xl font-medium">First Transaction</h2>
+            <h2 className="sm:text-xl font-medium">Last Transaction</h2>
 
             <motion.div
               className="text-6xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums"
@@ -74,14 +67,14 @@ export function FirstTransaction({
                 damping: 15,
               }}
             >
-              <motion.span>{firstDate.day}</motion.span>
+              <motion.span>{lastDate.day}</motion.span>
               <motion.span
                 className="text-4xl sm:text-6xl font-medium ml-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                {firstDate.month}, {firstDate.year}
+                {lastDate.month}, {lastDate.year}
               </motion.span>
             </motion.div>
 
@@ -99,4 +92,3 @@ export function FirstTransaction({
     </BaseScene>
   );
 }
-

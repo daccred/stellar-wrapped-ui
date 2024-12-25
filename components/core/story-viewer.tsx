@@ -151,7 +151,7 @@ export function StoryViewer({ stories }: StoryViewerProps) {
                     className="ml-1"
                     style={{ color: storyStyles.secondaryColor }}
                   >
-                    {stories.length || 0}
+                    {stories.length - 1 || 0}
                   </span>
                 </div>
               )}

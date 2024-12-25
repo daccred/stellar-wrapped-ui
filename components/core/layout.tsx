@@ -1,19 +1,13 @@
 'use client';
 
-import { PublicKeyProvider } from '@/contexts/PublicKeyContext';
-import { ScreenshotsProvider } from '@/contexts/ScreenshotProvider';
-import React from 'react';
+import React from "react";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AppLayout = ({ children }: Props) => {
-  return (
-    <PublicKeyProvider>
-      <ScreenshotsProvider>{children}</ScreenshotsProvider>
-    </PublicKeyProvider>
-  );
+  return <div>{children}</div>;
 };
 
 export default AppLayout;
