@@ -19,13 +19,11 @@ import { LoaderFallback } from "@/components/core/loader-fallback";
 import { FormattedActivitySummary } from "@/types";
 import { LastTransaction } from "./screens/last-transaction";
 import { MostActiveMonth } from "./screens/most-active-month";
-import { TokenStats } from "./screens/token-balance";
 
 export default function HomePage() {
   const { userData, isLoading, error } = usePublicKey();
   // get the user data from this context after fetching the data
   const [isClient, setIsClient] = useState<boolean>(false);
-  const [username] = useState("");
   const firstTransactionDate = userData?.first_transaction_date
     ? new Date(userData.first_transaction_date)
     : null;
@@ -46,42 +44,6 @@ export default function HomePage() {
     dateRange = "No transaction data available";
   }
 
-  const pnlData = {
-    overallPnl: 7250,
-    topPerformers: [
-      {
-        symbol: "USDC",
-        icon: "/icons/usdc.png",
-        amount: 3500,
-        percentageChange: 10,
-        quantity: 2,
-      },
-      {
-        symbol: "AQUA",
-        icon: "/icons/aqua.png",
-        amount: 2000,
-        percentageChange: 15,
-        quantity: 5000,
-      },
-      {
-        symbol: "XLM",
-        icon: "/icons/xlm.png",
-        amount: 5300,
-        percentageChange: 25,
-        quantity: 5000,
-      },
-    ],
-    worstPerformers: [
-      {
-        symbol: "xRF",
-        icon: "/icons/xrf.png",
-        amount: 1000,
-        percentageChange: -8,
-        quantity: 20000,
-      },
-    ],
-  };
-
   const stories = [
     {
       id: "wallet-input",
@@ -99,7 +61,7 @@ export default function HomePage() {
     },
     {
       id: "welcome",
-      component: <WelcomeMessage username={username} />,
+      component: <WelcomeMessage username={userData?.account || ""} />,
       requiresPublicKey: true,
       isShare: false,
       excludeScreenshot: true,
@@ -201,7 +163,10 @@ export default function HomePage() {
     {
       id: "time-on-chain",
       component: (
-        <TimeOnChain time_on_chain_days={userData?.time_on_chain_days || 0} />
+        <TimeOnChain
+          time_on_chain_days={userData?.time_on_chain_days || 0}
+          total_interaction_count={userData?.total_interaction_count || 0}
+        />
       ),
       requiresPublicKey: true,
       isShare: true,
@@ -232,18 +197,6 @@ export default function HomePage() {
     {
       id: "profit-loss",
       component: <ProfitLoss net_pnl={userData?.net_pnl || 0} />,
-      requiresPublicKey: true,
-      isShare: true,
-      excludeScreenshot: false,
-    },
-    {
-      id: "token-balance",
-      component: (
-        <TokenStats
-          token_balance={userData?.token_balance || 0}
-          total_interaction_count={userData?.total_interaction_count || 0}
-        />
-      ),
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,

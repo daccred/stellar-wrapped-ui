@@ -111,7 +111,7 @@ export function StoryViewer({ stories }: StoryViewerProps) {
 
     return (
       <>
-        {stories[currentIndex].id !== "welcome" && (
+        {stories[currentIndex].id !== "intro" && (
           <button
             className="absolute left-0 top-0 w-16 opacity-0 z-20 h-full"
             onClick={goToPreviousStory}

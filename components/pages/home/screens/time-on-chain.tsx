@@ -3,21 +3,37 @@
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BaseScene } from "./base-scene";
+import { Activity } from "lucide-react";
 
 interface TimeOnChainProps {
   time_on_chain_days: number;
+  total_interaction_count: number;
 }
 
-export function TimeOnChain({ time_on_chain_days }: TimeOnChainProps) {
+export function TimeOnChain({
+  time_on_chain_days,
+  total_interaction_count,
+}: TimeOnChainProps) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, Math.round);
-  const [uniqueText, setUniqueText] = useState("");
+  const interactionCount = useMotionValue(0);
+  const roundedInteractions = useTransform(interactionCount, Math.round);
+  const [uniqueText, setUniqueText] = useState<string>("");
 
   useEffect(() => {
     const animation = animate(count, time_on_chain_days, {
       duration: 2,
       ease: "easeOut",
     });
+
+    const interactionAnimation = animate(
+      interactionCount,
+      total_interaction_count,
+      {
+        duration: 2,
+        ease: "easeOut",
+      }
+    );
 
     // Set unique text based on duration
     if (time_on_chain_days < 30) {
@@ -34,8 +50,11 @@ export function TimeOnChain({ time_on_chain_days }: TimeOnChainProps) {
       );
     }
 
-    return animation.stop;
-  }, [time_on_chain_days]);
+    return () => {
+      animation.stop();
+      interactionAnimation.stop();
+    };
+  }, [time_on_chain_days, total_interaction_count]);
 
   return (
     <BaseScene
@@ -50,7 +69,6 @@ export function TimeOnChain({ time_on_chain_days }: TimeOnChainProps) {
           className="space-y-4"
         >
           <h2 className="sm:text-xl font-medium">TIME ON THE CHAIN</h2>
-
           <motion.div
             className="text-6xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums"
             initial={{ scale: 0.5, opacity: 0 }}
@@ -72,9 +90,27 @@ export function TimeOnChain({ time_on_chain_days }: TimeOnChainProps) {
               days
             </motion.span>
           </motion.div>
-
           <motion.div
-            className="text-lg sm:text-xl text-foreground font-medium"
+            className="pt-4 border-t border-white/10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
+            <div className="flex items-center gap-2 text-muted-foreground mb-2">
+              <Activity className="w-5 h-5" />
+              <span>Total Interactions</span>
+            </div>
+            <motion.div
+              className="text-3xl font-bold text-primary"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.4 }}
+            >
+              {roundedInteractions}
+            </motion.div>
+          </motion.div>{" "}
+          <motion.div
+            className="sm:text-lg text-foreground font-medium"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}

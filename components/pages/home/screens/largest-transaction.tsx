@@ -4,7 +4,8 @@ import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
 import { FormattedActivitySummary } from "@/types";
 import { Icons } from "@/assets/icons";
-import { convertLumensToUSDC } from "@/lib/utils";
+import { convertLumensToUSDC, formatDateN, formatNumber } from "@/lib/utils";
+import { StellarLogo } from "@/assets/logo";
 
 interface LargestTransactionProps {
   data: FormattedActivitySummary | null;
@@ -49,9 +50,9 @@ export function LargestTransaction({ data }: LargestTransactionProps) {
             transition={{ delay: 0.4 }}
           >
             <div className="flex items-center gap-1">
-              <Icons.USD />
+              <StellarLogo />
               <span className="font-semibold uppercase">
-                {totalTransactions.toLocaleString()} LXM
+                {totalTransactions.toLocaleString()} XLM
               </span>
             </div>
           </motion.div>
@@ -69,18 +70,22 @@ export function LargestTransaction({ data }: LargestTransactionProps) {
           <div className="space-y-3 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Date</span>
-              <span className="font-semibold">{data?.most_active_day}</span>
+              <span className="font-semibold">
+                {formatDateN(data?.most_active_day)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Total Transactions</span>
               <span className="font-semibold">
-                {data?.most_active_day_count}
+                {formatNumber(data?.most_active_day_count)}
               </span>
             </div>
-            {/* <div className="flex justify-between">
-              <span className="text-muted-foreground">Total Volume</span>
-              <span className="font-semibold">0 USDC</span>
-            </div> */}
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Token Balance</span>
+              <span className="font-semibold">
+                {formatNumber(data?.token_balance)?.toLocaleString()} XLM
+              </span>
+            </div>
           </div>
         </motion.div>
       </div>

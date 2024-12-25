@@ -54,8 +54,6 @@ export function LastTransaction({
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <h2 className="sm:text-xl font-medium">Last Transaction</h2>
-
             <motion.div
               className="text-6xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums"
               initial={{ scale: 0.5, opacity: 0 }}
@@ -79,7 +77,7 @@ export function LastTransaction({
             </motion.div>
 
             <motion.div
-              className="text-lg sm:text-xl text-foreground font-medium"
+              className="sm:text-lg text-foreground font-medium"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 }}
