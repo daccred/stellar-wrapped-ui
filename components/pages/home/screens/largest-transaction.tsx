@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
 import { FormattedActivitySummary } from "@/types";
-import { Icons } from "@/assets/icons";
 import { convertLumensToUSDC, formatDateN, formatNumber } from "@/lib/utils";
 import { StellarLogo } from "@/assets/logo";
 
