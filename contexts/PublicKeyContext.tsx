@@ -5,6 +5,9 @@ import { SummaryService } from "../services";
 
 export const SUMMARY_QUERY_KEY = "userSummary";
 
+const baseUrl =
+  "https://stellar-wrapped-api-production.up.railway.app/v1/wallet";
+
 interface PublicKeyContextType {
   publicKey: string | null;
   setPublicKey: (key: string | null) => void;
@@ -15,6 +18,7 @@ interface PublicKeyContextType {
 }
 
 const PublicKeyContext = createContext<PublicKeyContextType | undefined>(
+  undefined
   undefined
 );
 

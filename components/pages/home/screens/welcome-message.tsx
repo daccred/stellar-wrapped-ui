@@ -6,9 +6,11 @@ import Image from "next/image";
 
 interface WelcomeMessageProps {
   username: string;
+  username: string;
 }
 
 export function WelcomeMessage({ username }: WelcomeMessageProps) {
+  const { userData } = usePublicKey();
   return (
     <div className="relative h-full w-full flex flex-col items-start justify-center overflow-hidden px-4">
       <Image

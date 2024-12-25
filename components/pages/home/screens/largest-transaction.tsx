@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
@@ -81,6 +81,7 @@ export function LargestTransaction({ data }: LargestTransactionProps) {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Token Balance</span>
+              <span className="text-muted-foreground">Token Balance</span>
               <span className="font-semibold">
                 {formatNumber(data?.token_balance)?.toLocaleString()} XLM
               </span>
@@ -91,4 +92,3 @@ export function LargestTransaction({ data }: LargestTransactionProps) {
     </BaseScene>
   );
 }
-

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
@@ -104,4 +104,3 @@ export function NetPosition({ data }: NetPositionProps) {
     </BaseScene>
   );
 }
-
