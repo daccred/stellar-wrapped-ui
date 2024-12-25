@@ -1,24 +1,45 @@
-"use client"
+"use client";
 
-import { motion } from 'framer-motion'
-import { BaseScene } from './base-scene'
+import { motion } from "framer-motion";
+import { BaseScene } from "./base-scene";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { formatDateMY, formatNumber } from "@/lib/utils";
 
 interface TransactionCategory {
-  name: string
-  count: number
+  name: string;
+  count: number;
 }
 
 interface TransactionCountProps {
-  totalCount: number
-  dateRange: string
-  categories: TransactionCategory[]
+  totalCount: number;
+  dateRange: string;
+  categories: TransactionCategory[];
 }
 
-export function TransactionCount({ 
-  totalCount, 
+export function TransactionCount({
+  totalCount,
   dateRange,
-  categories 
+  categories,
 }: TransactionCountProps) {
+  const { userData } = usePublicKey();
+
+  // console.log(userData?.total_sent_amount);
+
+  const updatedCategories = [
+    {
+      name: "Received Amount",
+      value: formatNumber(userData?.total_received_amount),
+    },
+    { name: "Sent Amount", value: formatNumber(userData?.total_sent_amount) },
+    {
+      name: "Buying Amount",
+      value: formatNumber(userData?.total_buying_amount),
+    },
+    {
+      name: "Sold Amount",
+      value: formatNumber(userData?.total_selling_amount),
+    },
+  ];
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-yellow-bg.png"
@@ -43,7 +64,7 @@ export function TransactionCount({
               stiffness: 200,
             }}
           >
-            {totalCount}
+            {formatNumber(userData?.total_transactions)}
           </motion.div>
 
           <motion.p
@@ -52,7 +73,8 @@ export function TransactionCount({
             transition={{ delay: 0.4 }}
             className="text-sm"
           >
-            {dateRange}
+            {formatDateMY(userData?.first_transaction_date)} -{" "}
+            {formatDateMY(userData?.last_transaction_date)}
           </motion.p>
         </motion.div>
 
@@ -63,10 +85,10 @@ export function TransactionCount({
           transition={{ delay: 0.6 }}
         >
           <h3 className="text-base font-medium pb-4 border-b px-4 border-white">
-            Transactions by Category
+            Total Transactions by Category
           </h3>
           <div className="space-y-3 px-4">
-            {categories.map((category, index) => (
+            {updatedCategories.map((category, index) => (
               <motion.div
                 key={category.name}
                 className="flex justify-between items-center text-xs"
@@ -74,8 +96,8 @@ export function TransactionCount({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.8 + index * 0.1 }}
               >
-                <span className="text-muted-foreground">{category.name}</span>
-                <span className="font-semibold">{category.count}</span>
+                <span className="text-muted-foreground">{category?.name}</span>
+                <span className="font-semibold">{category?.value}</span>
               </motion.div>
             ))}
           </div>
@@ -84,4 +106,3 @@ export function TransactionCount({
     </BaseScene>
   );
 }
-

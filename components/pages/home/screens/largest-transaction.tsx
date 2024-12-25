@@ -1,26 +1,29 @@
-"use client"
+"use client";
 
-import { motion } from 'framer-motion'
-import { BaseScene } from './base-scene'
-import { Icons } from '@/assets/icons'
+import { motion } from "framer-motion";
+import { BaseScene } from "./base-scene";
+import { Icons } from "@/assets/icons";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { formatDateN, formatNumber } from "@/lib/utils";
 
 interface LargestTransactionProps {
-  amount: number
-  usdcAmount: number
-  date: string
+  amount: number;
+  usdcAmount: number;
+  date: string;
   mostActiveDay: {
-    date: string
-    totalTransactions: number
-    totalVolume: number
-  }
+    date: string;
+    totalTransactions: number;
+    totalVolume: number;
+  };
 }
 
-export function LargestTransaction({ 
-  amount, 
-  usdcAmount, 
+export function LargestTransaction({
+  amount,
+  usdcAmount,
   date,
-  mostActiveDay 
+  mostActiveDay,
 }: LargestTransactionProps) {
+  const { userData } = usePublicKey();
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-yellow-bg.png"
@@ -72,18 +75,22 @@ export function LargestTransaction({
           <div className="space-y-2 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Date</span>
-              <span className="font-semibold">{mostActiveDay.date}</span>
+              <span className="font-semibold">
+                {formatDateN(userData?.most_active_day)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Total Transactions</span>
               <span className="font-semibold">
-                {mostActiveDay.totalTransactions}
+                {formatNumber(
+                  userData?.most_active_day_count
+                )?.toLocaleString()}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Total Volume</span>
+              <span className="text-muted-foreground">Token Balance</span>
               <span className="font-semibold">
-                {mostActiveDay.totalVolume.toLocaleString()} USDC
+                {formatNumber(userData?.token_balance)?.toLocaleString()} XLM
               </span>
             </div>
           </div>
@@ -92,4 +99,3 @@ export function LargestTransaction({
     </BaseScene>
   );
 }
-
