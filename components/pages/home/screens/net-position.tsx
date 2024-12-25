@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
-import { motion } from 'framer-motion'
-import { BaseScene } from './base-scene'
+import { motion } from "framer-motion";
+import { BaseScene } from "./base-scene";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { formatNumber } from "@/lib/utils";
 
 interface NetPositionProps {
-  sent: number
-  received: number
-  netPosition: number
+  sent: number;
+  received: number;
+  netPosition: number;
 }
 
 export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
+  const { userData } = usePublicKey();
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-bg.png"
@@ -44,7 +47,8 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               }}
             >
               <h3 className="text-[63px] font-bold font-schabo w-fit leading-tight">
-                {sent.toLocaleString()} USDC
+                {formatNumber(userData?.total_sent_amount)?.toLocaleString()}{" "}
+                XLM
               </h3>
             </div>
           </motion.div>
@@ -59,7 +63,8 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               Received
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {received.toLocaleString()} USDC
+              {formatNumber(userData?.total_received_amount)?.toLocaleString()}{" "}
+              XLM
             </h3>
           </motion.div>
 
@@ -73,7 +78,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               Net Position
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {netPosition.toLocaleString()} USDC
+              {formatNumber(userData?.net_pnl)?.toLocaleString()} XLM
             </h3>
           </motion.div>
         </div>
@@ -91,4 +96,3 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
     </BaseScene>
   );
 }
-
