@@ -32,7 +32,7 @@ const activeComponents = [
     icon: Wallet,
   },
   { id: "starting-balance", title: "StartingBalance", icon: Coins },
-  { id: "transaction-count", title: "MostActiveMonth", icon: Calendar },
+  { id: "most-active-month", title: "MostActiveMonth", icon: Calendar },
   { id: "time-on-chain", title: "TimeOnChain", icon: Clock },
   { id: "first-transaction", title: "FirstTransaction", icon: CalendarCheck },
   { id: "last-transaction", title: "LastTransaction", icon: CalendarX },

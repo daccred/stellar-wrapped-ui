@@ -56,7 +56,9 @@ export function UniqueWalletTransfers() {
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Type</span>
                 <span className="font-medium">
-                  {userData?.top_largest_xlm?.[0]?.xlm_op_type_str}
+                  {userData?.top_largest_xlm?.[0]?.xlm_op_type_str
+                    .split("_")
+                    .join(" ")}
                 </span>
               </div>
               <div className="space-y-1 flex flex-col">

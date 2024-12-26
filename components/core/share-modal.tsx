@@ -35,7 +35,7 @@ export function ShareModal({
     quality: 0.8,
     onSuccess: (data) => {
       const link = document.createElement('a');
-      link.download = 'My Solana Wrapped 2024! 🚀✨';
+      link.download = "My Stellar Wrapped 2024! 🚀✨";
       link.href = data;
       link.click();
     },

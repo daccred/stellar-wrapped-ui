@@ -91,7 +91,7 @@ export default function HomePage() {
       excludeScreenshot: false,
     },
     {
-      id: "transaction-count",
+      id: "most-active-month",
       component: <MostActiveMonth />,
       requiresPublicKey: true,
       isShare: true,
@@ -210,7 +210,7 @@ export default function HomePage() {
   }, []);
 
   if (!isClient || isLoading) {
-    return <LoaderFallback />;
+    return <LoaderFallback isClient={!isClient} />;
   }
 
   if (error) {
