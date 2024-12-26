@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BaseScene } from "./base-scene";
 import { Icons } from "@/assets/icons";
 import { usePublicKey } from "@/contexts/PublicKeyContext";
-import { formatDateN, formatNumber } from "@/lib/utils";
+import { formatDateMDY, formatDateN, formatNumber } from "@/lib/utils";
 
 interface LargestTransactionProps {
   amount: number;
@@ -24,6 +24,12 @@ export function LargestTransaction({
   mostActiveDay,
 }: LargestTransactionProps) {
   const { userData } = usePublicKey();
+  const largestTransactionArray = JSON.parse(
+    userData?.top_largest_xlm || "[]"
+  )[0];
+
+  const largestNonxlm = JSON.parse(userData?.top_largest_nonxlm || "[]")[0];
+
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-yellow-bg.png"
@@ -48,7 +54,7 @@ export function LargestTransaction({
               stiffness: 200,
             }}
           >
-            ${amount.toLocaleString()}
+            {formatNumber(largestTransactionArray?.xlm_amount)} xlm
           </motion.div>
 
           <motion.div
@@ -57,11 +63,21 @@ export function LargestTransaction({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="flex items-center gap-1">
-              <Icons.USD />
-              <span className="font-semibold uppercase">{usdcAmount} USDC</span>
+            <span className="text-sm">
+              {formatDateMDY(largestTransactionArray?.tx_time)}
+            </span>
+            <div className="flex flex-row items-center justify-between w-full">
+              <div className="flex items-center gap-1">
+                <Icons.USD />
+                <span className="font-semibold uppercase">
+                  {formatNumber(largestNonxlm?.nonxlm_amount)}{" "}
+                  {largestNonxlm?.nonxlm_asset_code}
+                </span>
+              </div>
+              <span className="text-sm">
+                {formatDateMDY(largestNonxlm?.tx_time)}
+              </span>
             </div>
-            <span className="text-sm">{date}</span>
           </motion.div>
         </motion.div>
 

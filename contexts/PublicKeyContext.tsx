@@ -22,8 +22,7 @@ export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<UserData | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
 
-  // console.log(publicKey);
-  console.log("user data is", userData);
+  console.log(userData);
 
   const setPublicKey = (key: string | null) => {
     setPublicKeyState(key);

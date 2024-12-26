@@ -47,8 +47,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               }}
             >
               <h3 className="text-[63px] font-bold font-schabo w-fit leading-tight">
-                {formatNumber(userData?.total_sent_amount)?.toLocaleString()}{" "}
-                XLM
+                {formatNumber(userData?.total_sent_xlm)?.toLocaleString()} XLM
               </h3>
             </div>
           </motion.div>
@@ -63,8 +62,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               Received
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {formatNumber(userData?.total_received_amount)?.toLocaleString()}{" "}
-              XLM
+              {formatNumber(userData?.total_received_xlm)?.toLocaleString()} XLM
             </h3>
           </motion.div>
 
@@ -78,7 +76,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               Net Position
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {formatNumber(userData?.net_pnl)?.toLocaleString()} XLM
+              {formatNumber(userData?.net_pnl_xlm)?.toLocaleString()} XLM
             </h3>
           </motion.div>
         </div>

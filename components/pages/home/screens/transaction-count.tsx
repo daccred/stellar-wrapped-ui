@@ -27,17 +27,17 @@ export function TransactionCount({
 
   const updatedCategories = [
     {
-      name: "Received Amount",
-      value: formatNumber(userData?.total_received_amount),
+      name: "Received XLM Amount",
+      value: formatNumber(userData?.total_received_xlm),
     },
-    { name: "Sent Amount", value: formatNumber(userData?.total_sent_amount) },
+    { name: "Sent XLM Amount", value: formatNumber(userData?.total_sent_xlm) },
     {
-      name: "Buying Amount",
-      value: formatNumber(userData?.total_buying_amount),
+      name: "Buying XLM Amount",
+      value: formatNumber(userData?.total_buying_xlm),
     },
     {
-      name: "Sold Amount",
-      value: formatNumber(userData?.total_selling_amount),
+      name: "Sold XLM Amount",
+      value: formatNumber(userData?.total_selling_xlm),
     },
   ];
   return (
@@ -73,8 +73,8 @@ export function TransactionCount({
             transition={{ delay: 0.4 }}
             className="text-sm"
           >
-            {formatDateMY(userData?.first_transaction_date)} -{" "}
-            {formatDateMY(userData?.last_transaction_date)}
+            {formatDateMY(userData?.first_txn_time)} -{" "}
+            {formatDateMY(userData?.last_txn_time)}
           </motion.p>
         </motion.div>
 
