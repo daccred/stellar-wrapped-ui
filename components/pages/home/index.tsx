@@ -208,8 +208,8 @@ export default function HomePage() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-  console.log(isLoading, userData);
-  if (!isClient || isLoading) {
+
+  if (!isClient || !isLoading) {
     return <LoaderFallback />;
   }
 
