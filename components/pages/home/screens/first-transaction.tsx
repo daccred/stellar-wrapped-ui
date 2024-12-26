@@ -4,41 +4,52 @@ import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
 import { StoryHeader } from '@/components/core/header'
 import { useEffect, useState } from "react";
-import { Calendar } from "lucide-react";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
 
-interface FirstTransactionProps {
-  first_transaction_date: string;
-}
-
-export function FirstTransaction({
-  first_transaction_date,
-}: FirstTransactionProps) {
+export function FirstTransaction() {
+  const { userData } = usePublicKey();
+  const first_txn_time = userData?.first_txn_time || "";
   const [uniqueText, setUniqueText] = useState("");
 
   useEffect(() => {
-    const firstDate = new Date(first_transaction_date);
-    const currentDate = new Date();
-    const diffTime = Math.abs(currentDate.getTime() - firstDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const firstDate = new Date(first_txn_time);
+    const dayOfYear =
+      Math.floor(
+        (firstDate.getTime() - new Date("2024-01-01").getTime()) /
+          (1000 * 60 * 60 * 24)
+      ) + 1;
 
-    if (diffDays <= 7) {
-      setUniqueText("Your blockchain journey begins! Ready for takeoff! 🚀");
-    } else if (diffDays <= 30) {
+    // Early bird (January)
+    if (dayOfYear <= 31) {
       setUniqueText(
-        "The start of something big! Your crypto adventure is underway! 🌟"
-      );
-    } else if (diffDays <= 180) {
-      setUniqueText("Remember this day? It's when your crypto story began! 💫");
-    } else if (diffDays <= 365) {
-      setUniqueText(
-        "From this moment, you became part of the blockchain revolution! 🚀"
-      );
-    } else {
-      setUniqueText(
-        "One year ago, your crypto journey began! What a first year it's been! 🎉"
+        "Early bird! You started your 2024 crypto journey on day one! 🎯"
       );
     }
-  }, [first_transaction_date]);
+    // Q1 (February-March)
+    else if (dayOfYear <= 90) {
+      setUniqueText(
+        "Q1 Pioneer! Your 2024 journey began in the first quarter. 🌱"
+      );
+    }
+    // Q2 (April-June)
+    else if (dayOfYear <= 180) {
+      setUniqueText(
+        "Mid-year momentum! Your crypto adventure took off in Q2 2024. ☀️"
+      );
+    }
+    // Q3 (July-September)
+    else if (dayOfYear <= 270) {
+      setUniqueText(
+        "Q3 Explorer! You joined the blockchain revolution this autumn. 🍂"
+      );
+    }
+    // Q4 (October-December)
+    else {
+      setUniqueText(
+        "Year-end warrior! You made your mark in the final quarter of 2024. 🎄"
+      );
+    }
+  }, [first_txn_time]);
 
   const formatDate = (date: string) => {
     const d = new Date(date);
@@ -49,7 +60,7 @@ export function FirstTransaction({
     };
   };
 
-  const firstDate = formatDate(first_transaction_date);
+  const firstDate = formatDate(first_txn_time);
 
   return (
     <BaseScene backgroundImage="/backgrounds/home-bg.png">

@@ -16,33 +16,15 @@ import { Thanks } from "./screens/thanks";
 import { UniqueWalletTransfers } from "./screens/unique-wallet-transfers";
 import { usePublicKey } from "@/contexts/PublicKeyContext";
 import { LoaderFallback } from "@/components/core/loader-fallback";
-import { FormattedActivitySummary } from "@/types";
 import { LastTransaction } from "./screens/last-transaction";
 import { MostActiveMonth } from "./screens/most-active-month";
+import { StartingBalance } from "./screens/starting-balance";
+import { AuthErrorState } from "@/components/core/error-state";
 
 export default function HomePage() {
-  const { userData, isLoading, error } = usePublicKey();
+  const { userData, isLoading, error, retry } = usePublicKey();
   // get the user data from this context after fetching the data
   const [isClient, setIsClient] = useState<boolean>(false);
-  const firstTransactionDate = userData?.first_transaction_date
-    ? new Date(userData.first_transaction_date)
-    : null;
-  const lastTransactionDate = userData?.last_transaction_date
-    ? new Date(userData.last_transaction_date)
-    : null;
-
-  let dateRange = "";
-  if (firstTransactionDate && lastTransactionDate) {
-    dateRange = `${firstTransactionDate.toLocaleString("default", {
-      month: "long",
-    })} ${firstTransactionDate.getFullYear()} - ${lastTransactionDate.toLocaleString(
-      "default",
-      { month: "long" }
-    )} ${lastTransactionDate.getFullYear()}`;
-  } else {
-    // Handle the case where one or both dates are missing
-    dateRange = "No transaction data available";
-  }
 
   const stories = [
     {
@@ -56,71 +38,61 @@ export default function HomePage() {
       id: "intro",
       component: <IntroScreen />,
       requiresPublicKey: true,
-      isShare: true,
-      excludeScreenshot: true,
-    },
-    {
-      id: "welcome",
-      component: <WelcomeMessage username={userData?.account || ""} />,
-      requiresPublicKey: true,
       isShare: false,
       excludeScreenshot: true,
     },
     {
+      id: "welcome",
+      component: <WelcomeMessage />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: true,
+    },
+    {
       id: "largest-transaction",
-      component: <LargestTransaction data={userData} />,
+      component: <LargestTransaction />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "net-position",
-      component: <NetPosition data={userData} />,
+      component: <NetPosition />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "transaction-count",
-      component: (
-        <TransactionCount
-          totalCount={userData?.total_transactions || 0}
-          dateRange={dateRange}
-          categories={userData?.top_5_transactions_by_category || []}
-        />
-      ),
+      component: <TransactionCount />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "frequent-wallet",
-      component: (
-        <FrequentWallet
-          top_interaction_wallet={userData?.top_interaction_wallet || ""}
-        />
-      ),
+      component: <FrequentWallet />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "unique-wallet-transfers",
-      component: (
-        <UniqueWalletTransfers {...(userData as FormattedActivitySummary)} />
-      ),
+      component: <UniqueWalletTransfers />,
+      requiresPublicKey: true,
+      isShare: true,
+      excludeScreenshot: false,
+    },
+    {
+      id: "starting-balance",
+      component: <StartingBalance />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "transaction-count",
-      component: (
-        <MostActiveMonth
-          most_active_month={userData?.most_active_month || ""}
-          monthly_transaction_count={userData?.monthly_transaction_count || 0}
-        />
-      ),
+      component: <MostActiveMonth />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
@@ -162,41 +134,28 @@ export default function HomePage() {
     // },
     {
       id: "time-on-chain",
-      component: (
-        <TimeOnChain
-          time_on_chain_days={userData?.time_on_chain_days || 0}
-          total_interaction_count={userData?.total_interaction_count || 0}
-        />
-      ),
+      component: <TimeOnChain />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "first-transaction",
-      component: (
-        <FirstTransaction
-          first_transaction_date={userData?.first_transaction_date || ""}
-        />
-      ),
+      component: <FirstTransaction />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "last-transaction",
-      component: (
-        <LastTransaction
-          last_transaction_date={userData?.last_transaction_date || ""}
-        />
-      ),
+      component: <LastTransaction />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
     },
     {
       id: "profit-loss",
-      component: <ProfitLoss net_pnl={userData?.net_pnl || 0} />,
+      component: <ProfitLoss />,
       requiresPublicKey: true,
       isShare: true,
       excludeScreenshot: false,
@@ -252,6 +211,16 @@ export default function HomePage() {
   console.log(isLoading, userData);
   if (!isClient || isLoading) {
     return <LoaderFallback />;
+  }
+
+  if (error) {
+    return (
+      <AuthErrorState
+        title="Something went wrong!"
+        message="We encountered an error while processing your request. Please try again."
+        onRetry={retry}
+      />
+    );
   }
 
   return <StoryViewer stories={stories} />;

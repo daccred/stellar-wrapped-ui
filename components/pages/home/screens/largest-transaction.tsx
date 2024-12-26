@@ -7,22 +7,12 @@ import { usePublicKey } from "@/contexts/PublicKeyContext";
 import { formatDateMDY, formatDateN, formatNumber } from "@/lib/utils";
 
 
-interface LargestTransactionProps {
-  data: FormattedActivitySummary | null;
-}
-
-export function LargestTransaction({
-  amount,
-  usdcAmount,
-  date,
-  mostActiveDay,
-}: LargestTransactionProps) {
+export function LargestTransaction({}) {
   const { userData } = usePublicKey();
-  const largestTransactionArray = JSON.parse(
-    userData?.top_largest_xlm || "[]"
-  )[0];
 
-  const largestNonxlm = JSON.parse(userData?.top_largest_nonxlm || "[]")[0];
+  // Safely access the first item of the arrays with proper typing
+  const largestTransaction = userData?.top_largest_xlm?.[0];
+  const largestNonxlm = userData?.top_largest_nonxlm?.[0];
 
   return (
     <BaseScene
@@ -36,7 +26,7 @@ export function LargestTransaction({
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <h2 className="sm:text-xl font-medium">Total Transactions</h2>
+          <h2 className="sm:text-xl font-medium">Your Largest Transaction</h2>
 
           <motion.div
             className="text-6xl sm:text-[96px] font-bold font-schabo text-primary"
@@ -48,9 +38,7 @@ export function LargestTransaction({
               stiffness: 200,
             }}
           >
-
-            {formatNumber(largestTransactionArray?.xlm_amount)} xlm
-
+            {formatNumber(largestTransaction?.xlm_amount)} xlm
           </motion.div>
 
           <motion.div
@@ -59,9 +47,8 @@ export function LargestTransaction({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-
             <span className="text-sm">
-              {formatDateMDY(largestTransactionArray?.tx_time)}
+              {formatDateMDY(largestTransaction?.tx_time || "")}
             </span>
             <div className="flex flex-row items-center justify-between w-full">
               <div className="flex items-center gap-1">
@@ -72,8 +59,7 @@ export function LargestTransaction({
                 </span>
               </div>
               <span className="text-sm">
-                {formatDateMDY(largestNonxlm?.tx_time)}
-
+                {formatDateMDY(largestNonxlm?.tx_time || "")}
               </span>
             </div>
           </motion.div>
@@ -92,20 +78,19 @@ export function LargestTransaction({
             <div className="flex justify-between">
               <span className="text-muted-foreground">Date</span>
               <span className="font-semibold">
-                {formatDateN(data?.most_active_day)}
+                {formatDateN(userData?.most_active_day)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Total Transactions</span>
               <span className="font-semibold">
-                {formatNumber(data?.most_active_day_count)}
+                {formatNumber(userData?.most_active_day_count)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Token Balance</span>
-              <span className="text-muted-foreground">Token Balance</span>
               <span className="font-semibold">
-                {formatNumber(data?.token_balance)?.toLocaleString()} XLM
+                {formatNumber(userData?.token_balance)?.toLocaleString()} XLM
               </span>
             </div>
           </div>

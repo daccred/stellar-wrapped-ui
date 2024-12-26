@@ -4,101 +4,115 @@ import { motion, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BaseScene } from "./base-scene";
 import { StoryHeader } from "@/components/core/header";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { formatDateMY, truncateId } from "@/lib/utils";
 
-interface UniqueWalletTransfersProps {
-  unique_wallet_transfers: number;
-  total_selling_amount: number;
-  total_buying_amount: number;
-}
-
-export function UniqueWalletTransfers({
-  unique_wallet_transfers,
-  total_selling_amount,
-  total_buying_amount,
-}: UniqueWalletTransfersProps) {
-  const [uniqueText, setUniqueText] = useState("");
+export function UniqueWalletTransfers() {
+  const { userData } = usePublicKey();
   const count = useMotionValue(0);
+  const unique_wallet_transfers = userData?.unique_wallet_interactions || 0;
 
   useEffect(() => {
     const animation = animate(count, unique_wallet_transfers, { duration: 2 });
     return animation.stop;
   }, [count, unique_wallet_transfers]);
 
-  useEffect(() => {
-    if (total_selling_amount > total_buying_amount) {
-      setUniqueText("You're quite the seller! 🚀");
-    } else if (total_buying_amount > total_selling_amount) {
-      setUniqueText("Looks like you're on a buying spree! 💰");
-    } else {
-      setUniqueText("Perfectly balanced, as all things should be. ⚖️");
-    }
-  }, [total_selling_amount, total_buying_amount]);
-
+  const formatAmount = (amount: number) => {
+    return amount?.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
   return (
     <BaseScene
       backgroundImage="/backgrounds/purple-bg.png"
       className="text-muted"
     >
-      <div className="w-full max-w-md">
+      <div className="w-full">
         <StoryHeader
-          title="UNIQUE WALLET TRANSFERS"
-          chip={`Total Unique Wallets Interacted With: ${unique_wallet_transfers}`}
+          title="WALLET ACTIVITY INSIGHTS"
+          chip={`Total Unique Wallets Interacted With: ${userData?.unique_wallet_interactions}`}
           chipDisplay="chip"
         />
-
-        <motion.div
-          className="space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
+        <div className="space-y-5">
+          {/* Largest XLM Transaction */}
           <motion.div
-            className="space-y-1"
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
+            className="space-y-2.5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="font-bold">Largest XLM Transaction:</div>
+            <div className="space-y-2 capitalize">
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground text-xs">Amount</span>
+                <span className="font-medium">
+                  {formatAmount(
+                    userData?.top_largest_xlm?.[0]?.xlm_amount || 0
+                  )}{" "}
+                  XLM
+                </span>
+              </div>
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground text-xs">Type</span>
+                <span className="font-medium">
+                  {userData?.top_largest_xlm?.[0]?.xlm_op_type_str}
+                </span>
+              </div>
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground text-xs">Date</span>
+                <span className="font-medium">
+                  {formatDateMY(userData?.top_largest_xlm?.[0]?.tx_time)}
+                </span>
+              </div>
+              <div className="space-y-1 hidden flex-col">
+                <span className="text-muted-foreground text-xs">TX ID</span>
+                <span className="font-medium">
+                  {truncateId(userData?.top_largest_xlm?.[0]?.tx_id)}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Largest Non-XLM Transaction */}
+          <motion.div
+            className="space-y-2.5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="text-muted-foreground text-xs">
-              Total Selling Amount (Lumens)
+            <div className="font-bold">Largest Non-XLM Transaction:</div>
+            <div className="space-y-2 capitalize">
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground text-xs">Amount</span>
+                <span className="font-medium">
+                  {formatAmount(
+                    userData?.top_largest_nonxlm?.[0]?.nonxlm_amount || 0
+                  )}{" "}
+                  {userData?.top_largest_nonxlm?.[0]?.nonxlm_asset_code}
+                </span>
+              </div>
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground text-xs">Type</span>
+                <span className="font-medium">
+                  {userData?.top_largest_nonxlm?.[0]?.nonxlm_op_type_str}
+                </span>
+              </div>
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground text-xs">Date</span>
+                <span className="font-medium">
+                  {formatDateMY(userData?.top_largest_nonxlm?.[0]?.tx_time)}
+                </span>
+              </div>
+              <div className="space-y-1 hidden flex-col">
+                <span className="text-muted-foreground text-xs">TX ID</span>
+                <span className="font-medium">
+                  {truncateId(userData?.top_largest_nonxlm?.[0]?.tx_id)}
+                </span>
+              </div>
             </div>
-            <motion.div
-              className="text-base font-medium"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              {total_selling_amount.toLocaleString()} XLM
-            </motion.div>
           </motion.div>
-
-          <motion.div
-            className="space-y-1"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <div className="text-muted-foreground text-xs">
-              Total Buying Amount (Lumens)
-            </div>
-            <motion.div
-              className="text-base font-medium"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.7 }}
-            >
-              {total_buying_amount.toLocaleString()} XLM
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="mt-6 text-sm font-medium text-primary"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            {uniqueText}
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </BaseScene>
   );

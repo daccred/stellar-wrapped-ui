@@ -2,62 +2,131 @@
 
 import { motion } from "framer-motion";
 import { BaseScene } from "./base-scene";
-import { truncateId } from "@/lib/utils";
+import { formatDateMY, truncateId } from "@/lib/utils";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { StoryHeader } from "@/components/core/header";
 
-interface FrequentWalletProps {
-  top_interaction_wallet: string;
-}
+export function FrequentWallet() {
+  const { userData } = usePublicKey();
 
-export function FrequentWallet({
-  top_interaction_wallet,
-}: FrequentWalletProps) {
+  const formatAmount = (amount: number) => {
+    return amount?.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
   return (
     <BaseScene
       backgroundImage="/backgrounds/black-grunge-bg.png"
-      className=" text-white"
+      className="overflow-auto text-white"
     >
-      <div className="w-full max-w-md space-y-8 mt-16">
-        <motion.h1
-          className="text-4xl sm:text-[40px] font-bold font-schabo"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          TOP WALLET INTERACTION
-        </motion.h1>
+      {/* TOP WALLET INTERACTION */}
+      <div className="w-full pb-20">
+        <StoryHeader
+          title=" TOP TRANSACTIONS"
+          chip={`Top Interaction Count: ${userData?.top_interaction_count?.toLocaleString()}`}
+          chipDisplay="chip"
+        />
 
-        <div className="relative">
+        <div className="space-y-5">
           <motion.div
-            className="text-primary mb-4"
-            initial={{ opacity: 0, y: 10 }}
+            className="space-y-2.5 border-b pb-4 border-muted-foreground"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
           >
-            Most Frequent Interaction:
+            <motion.div
+              className="text-primary"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              Most Frequent Interaction:
+            </motion.div>
+            <motion.div
+              className="text-sm break-all relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              {truncateId(userData?.top_interaction_wallet)
+                ?.split("")
+                .map((char, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.4 + i * 0.02,
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 20,
+                    }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+            </motion.div>
           </motion.div>
 
+          {/* Top Trading Activity */}
           <motion.div
-            className=" text-base break-all relative"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+            className="space-y-2.5 border-b pb-4 border-muted-foreground"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
           >
-            {truncateId(top_interaction_wallet)
-              ?.split("")
-              .map((char, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: 0.4 + i * 0.02,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 20,
-                  }}
-                >
-                  {char}
-                </motion.span>
-              ))}
+            <div className="text-primary">Top Trading Activity</div>
+            <div className="space-y-2 text-muted-foreground text-sm capitalize">
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground">Buying</span>
+                <span className="text-foreground font-semibold">
+                  {formatAmount(
+                    userData?.top_nonxlm_buying?.[0]?.total_buying || 0
+                  )}{" "}
+                  {userData?.top_nonxlm_buying?.[0]?.code}
+                </span>
+              </div>
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground">Selling</span>
+                <span className="text-foreground font-semibold">
+                  {formatAmount(
+                    userData?.top_nonxlm_selling?.[0]?.total_selling || 0
+                  )}{" "}
+                  {userData?.top_nonxlm_selling?.[0]?.code}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Top Send/Receive Activity */}
+          <motion.div
+            className="space-y-2.5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="text-primary">Top Send/Receive Activity</div>
+            <div className="space-y-2 text-muted-foreground text-sm capitalize">
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground">Sent</span>
+                <span className="text-foreground font-semibold">
+                  {formatAmount(
+                    userData?.top_nonxlm_sent?.[0]?.total_sent || 0
+                  )}{" "}
+                  {userData?.top_nonxlm_sent?.[0]?.code}
+                </span>
+              </div>
+              <div className="space-y-1 flex flex-col">
+                <span className="text-muted-foreground">Received</span>
+                <span className="text-foreground font-semibold">
+                  {formatAmount(
+                    userData?.top_nonxlm_received?.[0]?.total_received || 0
+                  )}{" "}
+                  {userData?.top_nonxlm_received?.[0]?.code}
+                </span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

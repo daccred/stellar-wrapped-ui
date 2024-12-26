@@ -2,17 +2,15 @@
 
 import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
-import { TrendingDown, TrendingUp } from "lucide-react";
-import { StoryHeader } from "@/components/core/header";
+import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { cn, convertLumensToUSDC } from "@/lib/utils";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
 
-interface ProfitLossProps {
-  net_pnl: number;
-}
-
-export function ProfitLoss({ net_pnl }: ProfitLossProps) {
-  const isProfitable = net_pnl >= 0;
-  const absValue = Math.abs(net_pnl);
+export function ProfitLoss() {
+  const { userData } = usePublicKey();
+  const isZero = userData?.net_pnl_xlm === 0;
+  const isProfitable = !isZero && (userData?.net_pnl_xlm || 0) > 0;
+  const absValue = Math.abs(userData?.net_pnl_xlm || 0);
 
   return (
     <BaseScene
@@ -33,8 +31,9 @@ export function ProfitLoss({ net_pnl }: ProfitLossProps) {
               "text-6xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums",
               {
                 "text-[#34C759]": isProfitable,
-              },
-              { "text-red-500": !isProfitable }
+                "text-primary": isZero,
+                "text-red-500": !isProfitable && !isZero,
+              }
             )}
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -48,6 +47,8 @@ export function ProfitLoss({ net_pnl }: ProfitLossProps) {
             <motion.span>
               {isProfitable ? (
                 <TrendingUp className="w-6 h-6" />
+              ) : isZero ? (
+                <Minus className="w-6 h-6" />
               ) : (
                 <TrendingDown className="w-6 h-6" />
               )}
@@ -69,7 +70,9 @@ export function ProfitLoss({ net_pnl }: ProfitLossProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
           >
-            {isProfitable
+            {isZero
+              ? "Breaking even - your portfolio is perfectly balanced."
+              : isProfitable
               ? "Great job! Your portfolio is in the green."
               : "Keep going! Every loss is a lesson learned."}
           </motion.div>

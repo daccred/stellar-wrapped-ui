@@ -3,21 +3,13 @@
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BaseScene } from "./base-scene";
-import { Activity } from "lucide-react";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
 
-interface TimeOnChainProps {
-  time_on_chain_days: number;
-  total_interaction_count: number;
-}
-
-export function TimeOnChain({
-  time_on_chain_days,
-  total_interaction_count,
-}: TimeOnChainProps) {
+export function TimeOnChain() {
+  const { userData } = usePublicKey();
+  const time_on_chain_days = userData?.time_on_chain_days || 0;
   const count = useMotionValue(0);
   const rounded = useTransform(count, Math.round);
-  const interactionCount = useMotionValue(0);
-  const roundedInteractions = useTransform(interactionCount, Math.round);
   const [uniqueText, setUniqueText] = useState<string>("");
 
   useEffect(() => {
@@ -25,15 +17,6 @@ export function TimeOnChain({
       duration: 2,
       ease: "easeOut",
     });
-
-    const interactionAnimation = animate(
-      interactionCount,
-      total_interaction_count,
-      {
-        duration: 2,
-        ease: "easeOut",
-      }
-    );
 
     // Set unique text based on duration
     if (time_on_chain_days < 30) {
@@ -52,9 +35,8 @@ export function TimeOnChain({
 
     return () => {
       animation.stop();
-      interactionAnimation.stop();
     };
-  }, [time_on_chain_days, total_interaction_count]);
+  }, [time_on_chain_days]);
 
   return (
     <BaseScene
@@ -90,25 +72,6 @@ export function TimeOnChain({
               days
             </motion.span>
           </motion.div>
-          <motion.div
-            className="pt-4 border-t border-white/10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-          >
-            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <Activity className="w-5 h-5" />
-              <span>Total Interactions</span>
-            </div>
-            <motion.div
-              className="text-3xl font-bold text-primary"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.4 }}
-            >
-              {roundedInteractions}
-            </motion.div>
-          </motion.div>{" "}
           <motion.div
             className="sm:text-lg text-foreground font-medium"
             initial={{ opacity: 0, y: 10 }}

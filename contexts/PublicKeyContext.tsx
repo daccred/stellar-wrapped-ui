@@ -1,56 +1,127 @@
-import { UserData } from "@/types";
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { FormattedActivitySummary } from "@/types";
+import { SummaryService } from "../services";
+
+export const SUMMARY_QUERY_KEY = "userSummary";
 
 interface PublicKeyContextType {
   publicKey: string | null;
   setPublicKey: (key: string | null) => void;
-  userData: UserData | undefined;
-  isFetching: boolean;
-  fetchUserData: (key: string, data?: UserData) => Promise<void>;
+  userData: FormattedActivitySummary | null;
+  isLoading: boolean;
+  error: Error | null;
+  validateAndFetchData: (key: string) => Promise<void>;
+  fetchSharedData: (key: string) => Promise<void>;
+  retry: () => void;
 }
 
 const PublicKeyContext = createContext<PublicKeyContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
   const [publicKey, setPublicKeyState] = useState<string | null>(null);
-  const [userData, setUserData] = useState<UserData | undefined>(undefined);
-  const [isFetching, setIsFetching] = useState(false);
+  const queryClient = useQueryClient();
+
+  const {
+    data: userData,
+    isLoading,
+    error: queryError,
+    refetch,
+  } = useQuery({
+    queryKey: [SUMMARY_QUERY_KEY, publicKey],
+    queryFn: async () => {
+      if (!publicKey) {
+        throw new Error("Public key is not available");
+      }
+      return await SummaryService.getUserSummary(publicKey);
+    },
+    enabled: Boolean(publicKey),
+    staleTime: 5 * 60 * 1000,
+  });
 
   const setPublicKey = (key: string | null) => {
     setPublicKeyState(key);
     if (key) {
-      if (typeof window !== "undefined") {
-        localStorage.setItem("publicKey", key);
-      }
+      localStorage.setItem("publicKey", key);
     } else {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("publicKey");
-      }
+      localStorage.removeItem("publicKey");
+      queryClient.removeQueries({ queryKey: [SUMMARY_QUERY_KEY] });
     }
   };
 
-  const fetchUserData = async (key: string, data?: UserData) => {
-    setIsFetching(true);
+  const validateAndFetchData = async (key: string) => {
+    try {
+      const isValid = await SummaryService.validateWallet(key);
 
-    setUserData(data);
-    setIsFetching(false);
-    setPublicKey(key);
+      if (!isValid) {
+        throw new Error("Unable to fetch wallet data. Please try again.");
+      }
+
+      await queryClient.prefetchQuery<FormattedActivitySummary, Error>({
+        queryKey: [SUMMARY_QUERY_KEY, key],
+        queryFn: async () => await SummaryService.getUserSummary(key),
+      });
+
+      setPublicKey(key);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error && error.message
+          ? error.message
+          : "An unexpected error occurred. Please try again later.";
+
+      throw new Error(errorMessage);
+    }
+  };
+
+  const fetchSharedData = async (key: string) => {
+    try {
+      const isValid = await SummaryService.validateWallet(key);
+
+      if (!isValid) {
+        throw new Error("Unable to fetch wallet data. Please try again.");
+      }
+
+      await queryClient.prefetchQuery<FormattedActivitySummary, Error>({
+        queryKey: [SUMMARY_QUERY_KEY, key],
+        queryFn: async () => await SummaryService.getUserSummary(key),
+      });
+
+      setPublicKeyState(key);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error && error.message
+          ? error.message
+          : "An unexpected error occurred. Please try again later.";
+
+      throw new Error(errorMessage);
+    }
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedPublicKey = localStorage.getItem("publicKey");
-      if (storedPublicKey) {
-        fetchUserData(storedPublicKey);
-      }
+    const storedPublicKey = localStorage.getItem("publicKey");
+    if (storedPublicKey) {
+      setPublicKey(storedPublicKey);
     }
   }, []);
 
+  // Ensure that the error is always of type Error | null
+  const contextError: Error | null =
+    queryError instanceof Error ? queryError : null;
+
   return (
     <PublicKeyContext.Provider
-      value={{ publicKey, setPublicKey, userData, isFetching, fetchUserData }}
+      value={{
+        publicKey,
+        setPublicKey,
+        userData: userData ?? null,
+        isLoading,
+        error: contextError,
+        validateAndFetchData,
+        fetchSharedData,
+        retry: refetch,
+      }}
     >
       {children}
     </PublicKeyContext.Provider>

@@ -3,89 +3,65 @@
 import { motion } from "framer-motion";
 import { BaseScene } from "./base-scene";
 import { StoryHeader } from "@/components/core/header";
-import { useEffect, useState } from "react";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { truncateId } from "@/lib/utils";
 
-interface TransactionHistoryProps {
-  last_transaction_date: string;
-}
-
-export function LastTransaction({
-  last_transaction_date,
-}: TransactionHistoryProps) {
-  const [uniqueText, setUniqueText] = useState("");
-
-  useEffect(() => {
-    const lastDate = new Date(last_transaction_date);
-    const currentDate = new Date();
-    const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays <= 1) {
-      setUniqueText("Active today! Keep that momentum going! 🚀");
-    } else if (diffDays <= 7) {
-      setUniqueText("Recent activity this week! Stay engaged! ✨");
-    } else if (diffDays <= 30) {
-      setUniqueText("Last month's activity! Time to jump back in! 💫");
-    } else if (diffDays <= 90) {
-      setUniqueText("Been a while! The blockchain misses you! 🌟");
-    } else {
-      setUniqueText("Time for a comeback! The future awaits! 🏆");
-    }
-  }, [last_transaction_date]);
-
-  const formatDate = (date: string) => {
-    const d = new Date(date);
-    return {
-      month: d.toLocaleDateString("en-US", { month: "short" }),
-      day: d.getDate(),
-      year: d.getFullYear(),
-    };
-  };
-
-  const lastDate = formatDate(last_transaction_date);
+export function LastTransaction() {
+  const { userData } = usePublicKey();
 
   return (
     <BaseScene backgroundImage="/backgrounds/home-bg.png">
-      <div className="w-full max-w-xl space-y-8 text-muted">
-        <StoryHeader title="LAST TRANSACTION" chipDisplay="chip" />
-        <div className="w-full space-y-6 bg-black rounded-2xl p-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
-          >
-            <motion.div
-              className="text-6xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums"
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                delay: 0.5,
-                type: "spring",
-                stiffness: 200,
-                damping: 15,
-              }}
-            >
-              <motion.span>{lastDate.day}</motion.span>
-              <motion.span
-                className="text-4xl sm:text-6xl font-medium ml-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                {lastDate.month}, {lastDate.year}
-              </motion.span>
-            </motion.div>
+      <div className="w-full text-muted">
+        <StoryHeader
+          title="LAST TRANSACTION"
+          chip={` Date: ${userData?.last_txn_time}`}
+          chipDisplay="chip"
+        />
 
-            <motion.div
-              className="sm:text-lg text-foreground font-medium"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-            >
-              {uniqueText}
-            </motion.div>
-          </motion.div>
-        </div>
+        <motion.div
+          className="bg-white rounded-2xl py-4 space-y-4 border-black border text-muted"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h2 className="font-medium px-4 pb-4 border-b border-black">
+            Transaction Details
+          </h2>
+          <div className="space-y-3 text-xs px-4">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Type</span>
+              <span className="capitalize">
+                {userData?.last_transaction_details?.op_type_str
+                  .split("_")
+                  .join(" ") || "N/A"}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Amount</span>
+              <span>{userData?.last_transaction_details?.amount || "N/A"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Transaction ID</span>
+              <span>{truncateId(userData?.last_transaction_details?.id)}</span>
+            </div>
+            <div className="hidden justify-between">
+              <span className="text-muted-foreground">Asset Code</span>
+              <span>
+                {userData?.last_transaction_details?.asset_code || "N/A"}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Timestamp</span>
+              <span>
+                {userData?.last_transaction_details?.timestamp
+                  ? new Date(
+                      userData.last_transaction_details.timestamp
+                    ).toLocaleString()
+                  : "N/A"}
+              </span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </BaseScene>
   );

@@ -2,24 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { formatDateMY, formatNumber } from "@/lib/utils";
 
-interface TransactionCategory {
-  category: string;
-  count: number;
-}
-
-interface TransactionCountProps {
-  totalCount: number;
-  dateRange: string;
-  categories: TransactionCategory[];
-}
-
-export function TransactionCount({
-  totalCount,
-  dateRange,
-  categories,
-}: TransactionCountProps) {
-
+export function TransactionCount() {
   const { userData } = usePublicKey();
 
   // console.log(userData?.total_sent_amount);
@@ -64,7 +50,7 @@ export function TransactionCount({
               stiffness: 200,
             }}
           >
-            {totalCount}
+            {userData?.total_transactions}
           </motion.div>
 
           <motion.p
@@ -73,10 +59,8 @@ export function TransactionCount({
             transition={{ delay: 0.4 }}
             className="text-sm"
           >
-
             {formatDateMY(userData?.first_txn_time)} -{" "}
             {formatDateMY(userData?.last_txn_time)}
-
           </motion.p>
         </motion.div>
 
@@ -90,7 +74,7 @@ export function TransactionCount({
             Transactions by Category
           </h3>
           <div className="space-y-3 px-4">
-            {categories.map((category, index) => (
+            {updatedCategories.map((category, index) => (
               <motion.div
                 key={index}
                 className="flex justify-between items-center text-xs"
@@ -99,9 +83,9 @@ export function TransactionCount({
                 transition={{ delay: 0.8 + index * 0.1 }}
               >
                 <span className="text-muted-foreground capitalize">
-                  {category.category}
+                  {category.name}
                 </span>
-                <span className="font-semibold">{category.count}</span>
+                <span className="font-semibold">{category.value}</span>
               </motion.div>
             ))}
           </div>

@@ -2,23 +2,20 @@
 
 import { motion } from 'framer-motion'
 import { BaseScene } from './base-scene'
-import { FormattedActivitySummary } from "@/types";
-import { convertLumensToUSDC } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
 
-interface NetPositionProps {
-  data: FormattedActivitySummary | null;
-}
-
-export function NetPosition({ data }: NetPositionProps) {
-  const totalReceivedAmount = Number(data?.total_received_amount) || 0;
-  const totalSentAmount = Number(data?.total_sent_amount) || 0;
+export function NetPosition() {
+  const { userData } = usePublicKey();
+  const totalReceivedAmount = Number(userData?.total_received_xlm) || 0;
+  const totalSentAmount = Number(userData?.total_sent_xlm) || 0;
   const netPosition = totalReceivedAmount - totalSentAmount;
 
   // Determine dynamic text based on netPosition
   let dynamicText = "";
-  if (netPosition > 0) {
+  if (Number(netPosition) > 0) {
     dynamicText = "You’ve received more than you’ve sent out.";
-  } else if (netPosition < 0) {
+  } else if (Number(netPosition) < 0) {
     dynamicText = "You’ve sent out more than you’ve received.";
   } else {
     dynamicText = "Your sent and received amounts are balanced.";
@@ -58,9 +55,7 @@ export function NetPosition({ data }: NetPositionProps) {
               }}
             >
               <h3 className="text-[63px] font-bold font-schabo w-fit leading-tight">
-
                 {formatNumber(userData?.total_sent_xlm)?.toLocaleString()} XLM
-
               </h3>
             </div>
           </motion.div>
@@ -75,9 +70,7 @@ export function NetPosition({ data }: NetPositionProps) {
               Received
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-
               {formatNumber(userData?.total_received_xlm)?.toLocaleString()} XLM
-
             </h3>
           </motion.div>
 
@@ -91,9 +84,7 @@ export function NetPosition({ data }: NetPositionProps) {
               Net Position
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-
-              {formatNumber(userData?.net_pnl_xlm)?.toLocaleString()} XLM
-
+              {netPosition?.toLocaleString()} XLM
             </h3>
           </motion.div>
         </div>

@@ -1,14 +1,12 @@
 "use client";
 
+import { usePublicKey } from "@/contexts/PublicKeyContext";
 import { truncateId } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-interface WelcomeMessageProps {
-  username: string;
-}
-
-export function WelcomeMessage({ username }: WelcomeMessageProps) {
+export function WelcomeMessage() {
+  const { userData } = usePublicKey();
   return (
     <div className="relative h-full w-full flex flex-col items-start justify-center overflow-hidden px-4">
       <Image
@@ -26,7 +24,7 @@ export function WelcomeMessage({ username }: WelcomeMessageProps) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.8 }}
       >
-        Hi {truncateId(username) || "cryptowhiz.xlm"}
+        Hi {truncateId(userData?.account || "") || "cryptowhiz.xlm"}
       </motion.h1>
       <motion.p
         className="text-sm sm:text-base text-white z-50"

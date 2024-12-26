@@ -4,16 +4,13 @@ import { motion } from "framer-motion";
 import { BaseScene } from "./base-scene";
 import { StoryHeader } from "@/components/core/header";
 import { Activity, Calendar } from "lucide-react";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
 
-interface MostActiveMonthProps {
-  most_active_month: string;
-  monthly_transaction_count: number;
-}
+export function MostActiveMonth() {
+  const { userData } = usePublicKey();
+  const most_active_month = userData?.most_active_month || "";
+  const monthly_transaction_count = userData?.most_active_month_count || 0;
 
-export function MostActiveMonth({
-  most_active_month,
-  monthly_transaction_count,
-}: MostActiveMonthProps) {
   const formatDate = (dateString: string) => {
     const [year, month] = dateString.split("-");
     const date = new Date(parseInt(year), parseInt(month) - 1);
