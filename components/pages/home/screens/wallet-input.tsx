@@ -7,6 +7,7 @@ import { SUMMARY_QUERY_KEY, usePublicKey } from "@/contexts/PublicKeyContext";
 import { BaseScene } from "./base-scene";
 import { useQueryClient } from "@tanstack/react-query";
 import { SummaryService } from "@/services";
+import { LoaderFallback } from "@/components/core/loader-fallback";
 
 const WalletInput = () => {
   const [publicKey, setPublicKey] = useState<string>("");
@@ -67,6 +68,9 @@ const WalletInput = () => {
     }
   };
 
+  if (isLoading) {
+    return <LoaderFallback />;
+  }
   return (
     <BaseScene backgroundImage="/backgrounds/home-bg.png" isCenter>
       <div className="relative h-full w-full z-40 flex flex-col items-center justify-center -mt-20">
