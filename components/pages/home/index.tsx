@@ -209,7 +209,7 @@ export default function HomePage() {
     setIsClient(true);
   }, []);
 
-  if (!isClient || !isLoading) {
+  if (!isClient || isLoading) {
     return <LoaderFallback />;
   }
 
