@@ -1,29 +1,20 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { BaseScene } from "./base-scene";
-import { Icons } from "@/assets/icons";
-import { usePublicKey } from "@/contexts/PublicKeyContext";
-import { formatDateN, formatNumber } from "@/lib/utils";
+import { motion } from 'framer-motion'
+import { BaseScene } from './base-scene'
+import { FormattedActivitySummary } from "@/types";
+import { convertLumensToUSDC, formatDateN, formatNumber } from "@/lib/utils";
+import { StellarLogo } from "@/assets/logo";
 
 interface LargestTransactionProps {
-  amount: number;
-  usdcAmount: number;
-  date: string;
-  mostActiveDay: {
-    date: string;
-    totalTransactions: number;
-    totalVolume: number;
-  };
+  data: FormattedActivitySummary | null;
 }
 
-export function LargestTransaction({
-  amount,
-  usdcAmount,
-  date,
-  mostActiveDay,
-}: LargestTransactionProps) {
-  const { userData } = usePublicKey();
+export function LargestTransaction({ data }: LargestTransactionProps) {
+  const totalReceivedAmount = Number(data?.total_received_amount) || 0;
+  const totalSentAmount = Number(data?.total_sent_amount) || 0;
+  const totalTransactions = totalReceivedAmount + totalSentAmount || 0;
+
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-yellow-bg.png"
@@ -36,10 +27,10 @@ export function LargestTransaction({
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <h2 className="text-xl font-medium">Your Largest Transaction</h2>
+          <h2 className="sm:text-xl font-medium">Total Transactions</h2>
 
           <motion.div
-            className="text-[96px] font-bold font-schabo text-primary"
+            className="text-6xl sm:text-[96px] font-bold font-schabo text-primary"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{
@@ -48,20 +39,21 @@ export function LargestTransaction({
               stiffness: 200,
             }}
           >
-            ${amount.toLocaleString()}
+            ${convertLumensToUSDC(totalTransactions)}
           </motion.div>
 
           <motion.div
-            className="flex flex-col items-start gap-4"
+            className="flex flex-col items-start gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
             <div className="flex items-center gap-1">
-              <Icons.USD />
-              <span className="font-semibold uppercase">{usdcAmount} USDC</span>
+              <StellarLogo />
+              <span className="font-semibold uppercase">
+                {totalTransactions.toLocaleString()} XLM
+              </span>
             </div>
-            <span className="text-sm">{date}</span>
           </motion.div>
         </motion.div>
 
@@ -71,26 +63,27 @@ export function LargestTransaction({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="text-lg font-medium">Most Active Transaction Day</h3>
-          <div className="space-y-2 text-xs">
+          <h3 className="sm:text-lg font-medium">
+            Most Active Transaction Day
+          </h3>
+          <div className="space-y-3 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Date</span>
               <span className="font-semibold">
-                {formatDateN(userData?.most_active_day)}
+                {formatDateN(data?.most_active_day)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Total Transactions</span>
               <span className="font-semibold">
-                {formatNumber(
-                  userData?.most_active_day_count
-                )?.toLocaleString()}
+                {formatNumber(data?.most_active_day_count)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Token Balance</span>
+              <span className="text-muted-foreground">Token Balance</span>
               <span className="font-semibold">
-                {formatNumber(userData?.token_balance)?.toLocaleString()} XLM
+                {formatNumber(data?.token_balance)?.toLocaleString()} XLM
               </span>
             </div>
           </div>

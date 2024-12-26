@@ -1,18 +1,29 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { BaseScene } from "./base-scene";
-import { usePublicKey } from "@/contexts/PublicKeyContext";
-import { formatNumber } from "@/lib/utils";
+import { motion } from 'framer-motion'
+import { BaseScene } from './base-scene'
+import { FormattedActivitySummary } from "@/types";
+import { convertLumensToUSDC } from "@/lib/utils";
 
 interface NetPositionProps {
-  sent: number;
-  received: number;
-  netPosition: number;
+  data: FormattedActivitySummary | null;
 }
 
-export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
-  const { userData } = usePublicKey();
+export function NetPosition({ data }: NetPositionProps) {
+  const totalReceivedAmount = Number(data?.total_received_amount) || 0;
+  const totalSentAmount = Number(data?.total_sent_amount) || 0;
+  const netPosition = totalReceivedAmount - totalSentAmount;
+
+  // Determine dynamic text based on netPosition
+  let dynamicText = "";
+  if (netPosition > 0) {
+    dynamicText = "You’ve received more than you’ve sent out.";
+  } else if (netPosition < 0) {
+    dynamicText = "You’ve sent out more than you’ve received.";
+  } else {
+    dynamicText = "Your sent and received amounts are balanced.";
+  }
+
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-bg.png"
@@ -47,8 +58,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               }}
             >
               <h3 className="text-[63px] font-bold font-schabo w-fit leading-tight">
-                {formatNumber(userData?.total_sent_amount)?.toLocaleString()}{" "}
-                XLM
+                ${convertLumensToUSDC(totalSentAmount)} USDC
               </h3>
             </div>
           </motion.div>
@@ -63,8 +73,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               Received
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {formatNumber(userData?.total_received_amount)?.toLocaleString()}{" "}
-              XLM
+              {convertLumensToUSDC(totalReceivedAmount)} USDC
             </h3>
           </motion.div>
 
@@ -78,7 +87,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
               Net Position
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {formatNumber(userData?.net_pnl)?.toLocaleString()} XLM
+              {convertLumensToUSDC(netPosition)} USDC
             </h3>
           </motion.div>
         </div>
@@ -89,8 +98,7 @@ export function NetPosition({ sent, received, netPosition }: NetPositionProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          You&apos;ve sent out more than you&apos;ve received, primarily through
-          swaps and NFT purchases.
+          {dynamicText}
         </motion.p>
       </div>
     </BaseScene>

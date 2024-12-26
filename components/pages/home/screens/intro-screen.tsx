@@ -1,4 +1,4 @@
-import { StellarLogo } from "@/assets/logo";
+import { StellarFullLogo } from "@/assets/logo";
 import { BaseScene } from "./base-scene";
 
 export function IntroScreen() {
@@ -10,7 +10,7 @@ export function IntroScreen() {
     >
       {/* Main Content */}
       <div className="relative flex-1 flex items-center justify-center p-6 z-10 ">
-        <StellarLogo />
+        <StellarFullLogo />
       </div>
     </BaseScene>
   );
