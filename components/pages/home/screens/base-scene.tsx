@@ -2,20 +2,21 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ReactNode } from "react";
 
 interface BaseSceneProps {
   children: ReactNode;
   backgroundImage?: string;
   className?: string;
-  isCenter?: boolean
+  isCenter?: boolean;
 }
 
 export function BaseScene({
   children,
   backgroundImage,
   className = "",
-  isCenter = false
+  isCenter = false,
 }: BaseSceneProps) {
   return (
     <motion.div
@@ -26,9 +27,13 @@ export function BaseScene({
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       {backgroundImage && (
-        <div
-          className="absolute inset-0 bg-cover bg-no-repeat"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
+        <Image
+          src={backgroundImage}
+          alt="Background image"
+          width={240}
+          height={80}
+          className="absolute w-full h-full inset-0"
+          unoptimized
         />
       )}
       <div

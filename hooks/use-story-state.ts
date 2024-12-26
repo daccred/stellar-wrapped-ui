@@ -240,7 +240,7 @@ export function useStoryState(
     resetProgress();
     const timer = setTimeout(() => {
       if (!isPaused) {
-        // goToNextStory();
+        goToNextStory();
       }
     }, 10000);
 
