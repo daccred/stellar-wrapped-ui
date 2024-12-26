@@ -1,19 +1,28 @@
 "use client";
 
-import { motion } from 'framer-motion'
-import { BaseScene } from './base-scene'
-import { FormattedActivitySummary } from "@/types";
-import { convertLumensToUSDC, formatDateN, formatNumber } from "@/lib/utils";
-import { StellarLogo } from "@/assets/logo";
+import { motion } from "framer-motion";
+import { BaseScene } from "./base-scene";
+import { Icons } from "@/assets/icons";
+import { usePublicKey } from "@/contexts/PublicKeyContext";
+import { formatDateMDY, formatDateN, formatNumber } from "@/lib/utils";
+
 
 interface LargestTransactionProps {
   data: FormattedActivitySummary | null;
 }
 
-export function LargestTransaction({ data }: LargestTransactionProps) {
-  const totalReceivedAmount = Number(data?.total_received_amount) || 0;
-  const totalSentAmount = Number(data?.total_sent_amount) || 0;
-  const totalTransactions = totalReceivedAmount + totalSentAmount || 0;
+export function LargestTransaction({
+  amount,
+  usdcAmount,
+  date,
+  mostActiveDay,
+}: LargestTransactionProps) {
+  const { userData } = usePublicKey();
+  const largestTransactionArray = JSON.parse(
+    userData?.top_largest_xlm || "[]"
+  )[0];
+
+  const largestNonxlm = JSON.parse(userData?.top_largest_nonxlm || "[]")[0];
 
   return (
     <BaseScene
@@ -39,7 +48,9 @@ export function LargestTransaction({ data }: LargestTransactionProps) {
               stiffness: 200,
             }}
           >
-            ${convertLumensToUSDC(totalTransactions)}
+
+            {formatNumber(largestTransactionArray?.xlm_amount)} xlm
+
           </motion.div>
 
           <motion.div
@@ -48,10 +59,21 @@ export function LargestTransaction({ data }: LargestTransactionProps) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="flex items-center gap-1">
-              <StellarLogo />
-              <span className="font-semibold uppercase">
-                {totalTransactions.toLocaleString()} XLM
+
+            <span className="text-sm">
+              {formatDateMDY(largestTransactionArray?.tx_time)}
+            </span>
+            <div className="flex flex-row items-center justify-between w-full">
+              <div className="flex items-center gap-1">
+                <Icons.USD />
+                <span className="font-semibold uppercase">
+                  {formatNumber(largestNonxlm?.nonxlm_amount)}{" "}
+                  {largestNonxlm?.nonxlm_asset_code}
+                </span>
+              </div>
+              <span className="text-sm">
+                {formatDateMDY(largestNonxlm?.tx_time)}
+
               </span>
             </div>
           </motion.div>

@@ -73,7 +73,9 @@ export function formatDateMY(
 
 export function formatNumber(
   num: number | undefined | null
+
 ): string | undefined | null {
+
   // Handle undefined or null
   if (num === undefined || num === null) {
     return "0"; // Return undefined or null as-is
@@ -106,3 +108,21 @@ export function formatNumber(
   // If the number is less than 1000, return it as-is
   return isNegative ? `-${num}` : num.toString();
 }
+
+export const formatDateMDY = (
+  isoDateString: string,
+  locale: string = "en-US"
+): string => {
+  const date = new Date(isoDateString);
+
+  if (isNaN(date.getTime())) {
+    // Return a fallback value in case the date is invalid
+    return "Invalid date";
+  }
+
+  return date.toLocaleDateString(locale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};

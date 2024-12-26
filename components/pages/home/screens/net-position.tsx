@@ -58,7 +58,9 @@ export function NetPosition({ data }: NetPositionProps) {
               }}
             >
               <h3 className="text-[63px] font-bold font-schabo w-fit leading-tight">
-                ${convertLumensToUSDC(totalSentAmount)} USDC
+
+                {formatNumber(userData?.total_sent_xlm)?.toLocaleString()} XLM
+
               </h3>
             </div>
           </motion.div>
@@ -73,7 +75,9 @@ export function NetPosition({ data }: NetPositionProps) {
               Received
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {convertLumensToUSDC(totalReceivedAmount)} USDC
+
+              {formatNumber(userData?.total_received_xlm)?.toLocaleString()} XLM
+
             </h3>
           </motion.div>
 
@@ -87,7 +91,9 @@ export function NetPosition({ data }: NetPositionProps) {
               Net Position
             </span>
             <h3 className="text-[63px] font-schabo font-bold leading-tight">
-              {convertLumensToUSDC(netPosition)} USDC
+
+              {formatNumber(userData?.net_pnl_xlm)?.toLocaleString()} XLM
+
             </h3>
           </motion.div>
         </div>

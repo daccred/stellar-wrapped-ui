@@ -19,6 +19,27 @@ export function TransactionCount({
   dateRange,
   categories,
 }: TransactionCountProps) {
+
+  const { userData } = usePublicKey();
+
+  // console.log(userData?.total_sent_amount);
+
+  const updatedCategories = [
+    {
+      name: "Received XLM Amount",
+      value: formatNumber(userData?.total_received_xlm),
+    },
+    { name: "Sent XLM Amount", value: formatNumber(userData?.total_sent_xlm) },
+    {
+      name: "Buying XLM Amount",
+      value: formatNumber(userData?.total_buying_xlm),
+    },
+    {
+      name: "Sold XLM Amount",
+      value: formatNumber(userData?.total_selling_xlm),
+    },
+  ];
+
   return (
     <BaseScene
       backgroundImage="/backgrounds/dotted-yellow-bg.png"
@@ -52,7 +73,10 @@ export function TransactionCount({
             transition={{ delay: 0.4 }}
             className="text-sm"
           >
-            {dateRange}
+
+            {formatDateMY(userData?.first_txn_time)} -{" "}
+            {formatDateMY(userData?.last_txn_time)}
+
           </motion.p>
         </motion.div>
 
