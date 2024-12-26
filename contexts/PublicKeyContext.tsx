@@ -23,7 +23,7 @@ export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
   const [isFetching, setIsFetching] = useState(false);
 
   // console.log(publicKey);
-  // console.log("user data is", userData);
+  console.log("user data is", userData);
 
   const setPublicKey = (key: string | null) => {
     setPublicKeyState(key);
@@ -39,7 +39,7 @@ export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
   };
 
   const fetchUserData = async (key: string, data?: UserData) => {
-    console.log("this ran");
+    // console.log("this ran");
     setIsFetching(true);
 
     const url = `${baseUrl}/${key}/activity-summary`; // Add address as a query parameter
