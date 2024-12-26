@@ -1,88 +1,111 @@
-<img src="https://github.com/remotion-dev/template-next/assets/1629785/9092db5f-7c0c-4d38-97c4-5f5a61f5cc098" />
-<br/>
-<br/>
+# Stellar Wrapped 🌟
 
-This is a Next.js template for building programmatic video apps, with [`@remotion/player`](https://remotion.dev/player) and [`@remotion/lambda`](https://remotion.dev/lambda) built in.
+A web application that provides personalized insights and analytics for Stellar blockchain users, similar to Spotify Wrapped but for your Stellar wallet activity.
 
-This template uses the Next.js App directory, with TailwindCSS. There is a [Non-TailwindCSS version](https://github.com/remotion-dev/template-next-app-dir), and a [Pages directory version](https://github.com/remotion-dev/template-next-pages-dir) of this template available.
+## Features 🚀
 
-<img src="https://github.com/remotion-dev/template-next/assets/1629785/c9c2e5ca-2637-4ec8-8e40-a8feb5740d88" />
+- **Transaction Analysis**: View your largest transactions, net position, and transaction count
+- **Wallet Insights**: Track frequent wallets you interact with and unique wallet transfers
+- **Historical Data**: See your starting balance, first transaction, and last transaction
+- **Performance Metrics**: Analyze profit/loss and time spent on the Stellar chain
+- **Most Active Period**: Discover your most active months on the network
+- **Shareable Stats**: Generate and share your blockchain activity insights
 
-## Getting Started
+## Tech Stack 💻
 
-[Use this template](https://github.com/new?template_name=template-next-app-dir-tailwind&template_owner=remotion-dev) to clone it into your GitHub account. Run
+- **Framework**: Next.js 15.0.4
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **State Management**: TanStack Query (React Query)
+- **UI Components**: 
+  - Radix UI
+  - Shadcn/UI
+  - Embla Carousel
+  - Framer Motion
+- **Data Visualization**: Recharts
+- **Image Generation**: html2canvas, react-to-image
+- **Database**: MongoDB with Mongoose
+- **Icons**: Lucide React
 
-```
-pnpm i
-```
+## Getting Started 🏁
 
-afterwards. Alternatively, use this command to scaffold a project:
+### Prerequisites
 
-```
-npx create-video@latest --next-tailwind
-```
+- Node.js (version 18 or higher)
+- pnpm package manager
 
-## Commands
+### Installation
 
-Start the Next.js dev server:
-
-```
-pnpm run dev
-```
-
-Open the Remotion Studio:
-
-```
-npx remotion studio
-```
-
-Render a video locally:
-
-```
-pnpm exec remotion render
-```
-
-Upgrade Remotion:
-
-```
-pnpm exec remotion upgrade
+1. Clone the repository:
+```bash
+git clone https://github.com/daccred/stellar-wrapped-ui.git
+cd stellar-wrapped
 ```
 
-The following script will set up your Remotion Bundle and Lambda function on AWS:
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+3. Set up environment variables:
+Create a `.env.local` file in the root directory with the following variables:
+```env
+# Add your environment variables here
+```
+
+4. Start the development server:
+```bash
+pnpm dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+### Building for Production
+
+```bash
+pnpm build
+```
+
+## Project Structure 📁
 
 ```
-node deploy.mjs
+stellar-wrapped/
+├── app/                   # Next.js app directory
+├── components/           
+│   ├── core/             # Core UI components
+│   └── stories/          # Story-specific components
+├── contexts/             # React contexts
+├── lib/                  # Utility functions
+├── public/              # Static assets
+└── styles/              # Global styles
 ```
 
-You should run this script after:
+## Story Components 📊
 
-- changing the video template
-- changing `config.mjs`
-- upgrading Remotion to a newer version
+The application includes several story components that provide different insights:
 
-## Set up rendering on AWS Lambda
+- `LargestTransaction`: Shows your biggest transactions
+- `NetPosition`: Displays your overall position on Stellar
+- `TransactionCount`: Total number of transactions
+- `FrequentWallet`: Most frequently interacted wallets
+- `UniqueWalletTransfers`: Number of unique wallets interacted with
+- `StartingBalance`: Initial wallet balance
+- `MostActiveMonth`: Period with highest activity
+- `TimeOnChain`: Total time active on Stellar
+- `FirstTransaction`: Details of first transaction
+- `LastTransaction`: Most recent transaction
+- `ProfitLoss`: Overall profit/loss analysis
 
-This template supports rendering the videos via [Remotion Lambda](https://remotion.dev/lambda).
+## License 📝
 
-1. Copy the `.env.example` file to `.env` and fill in the values.
-   Complete the [Lambda setup guide](https://www.remotion.dev/docs/lambda/setup) to get your AWS credentials.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-1. Edit the `config.mjs` file to your desired Lambda settings.
+## Acknowledgments 🙏
 
-1. Run `node deploy.mjs` to deploy your Lambda function and Remotion Bundle.
+- Stellar Development Foundation
+- Next.js team
+- Attest.so
 
-## Docs
+## Support 💬
 
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://remotion.dev/discord).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://remotion.dev/issue).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+For support, please open an issue in the GitHub repository or contact the maintenance team.
