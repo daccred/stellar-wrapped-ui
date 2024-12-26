@@ -6,15 +6,9 @@ import { Icons } from "@/assets/icons";
 import { usePublicKey } from "@/contexts/PublicKeyContext";
 import { formatDateMDY, formatDateN, formatNumber } from "@/lib/utils";
 
+
 interface LargestTransactionProps {
-  amount: number;
-  usdcAmount: number;
-  date: string;
-  mostActiveDay: {
-    date: string;
-    totalTransactions: number;
-    totalVolume: number;
-  };
+  data: FormattedActivitySummary | null;
 }
 
 export function LargestTransaction({
@@ -42,10 +36,10 @@ export function LargestTransaction({
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <h2 className="text-xl font-medium">Your Largest Transaction</h2>
+          <h2 className="sm:text-xl font-medium">Total Transactions</h2>
 
           <motion.div
-            className="text-[96px] font-bold font-schabo text-primary"
+            className="text-6xl sm:text-[96px] font-bold font-schabo text-primary"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{
@@ -54,15 +48,18 @@ export function LargestTransaction({
               stiffness: 200,
             }}
           >
+
             {formatNumber(largestTransactionArray?.xlm_amount)} xlm
+
           </motion.div>
 
           <motion.div
-            className="flex flex-col items-start gap-4"
+            className="flex flex-col items-start gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
+
             <span className="text-sm">
               {formatDateMDY(largestTransactionArray?.tx_time)}
             </span>
@@ -76,6 +73,7 @@ export function LargestTransaction({
               </div>
               <span className="text-sm">
                 {formatDateMDY(largestNonxlm?.tx_time)}
+
               </span>
             </div>
           </motion.div>
@@ -87,26 +85,27 @@ export function LargestTransaction({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="text-lg font-medium">Most Active Transaction Day</h3>
-          <div className="space-y-2 text-xs">
+          <h3 className="sm:text-lg font-medium">
+            Most Active Transaction Day
+          </h3>
+          <div className="space-y-3 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Date</span>
               <span className="font-semibold">
-                {formatDateN(userData?.most_active_day)}
+                {formatDateN(data?.most_active_day)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Total Transactions</span>
               <span className="font-semibold">
-                {formatNumber(
-                  userData?.most_active_day_count
-                )?.toLocaleString()}
+                {formatNumber(data?.most_active_day_count)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Token Balance</span>
+              <span className="text-muted-foreground">Token Balance</span>
               <span className="font-semibold">
-                {formatNumber(userData?.token_balance)?.toLocaleString()} XLM
+                {formatNumber(data?.token_balance)?.toLocaleString()} XLM
               </span>
             </div>
           </div>

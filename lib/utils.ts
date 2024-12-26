@@ -5,6 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function convertLumensToUSDC(lumens: number) {
+  const conversionRate = 0.404691;
+  const usdc = lumens * conversionRate;
+  return usdc.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export function truncateId(
   str: string | undefined | null
 ): string | undefined | null {
@@ -64,10 +73,12 @@ export function formatDateMY(
 
 export function formatNumber(
   num: number | undefined | null
-): number | string | undefined | null {
+
+): string | undefined | null {
+
   // Handle undefined or null
   if (num === undefined || num === null) {
-    return 0; // Return undefined or null as-is
+    return "0"; // Return undefined or null as-is
   }
 
   // Handle negative numbers

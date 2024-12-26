@@ -1,9 +1,5 @@
 import { UserData } from "@/types";
-import axios from "axios";
 import React, { createContext, useState, useContext, useEffect } from "react";
-
-const baseUrl =
-  "https://stellar-wrapped-api-production.up.railway.app/v1/wallet";
 
 interface PublicKeyContextType {
   publicKey: string | null;
@@ -14,15 +10,13 @@ interface PublicKeyContextType {
 }
 
 const PublicKeyContext = createContext<PublicKeyContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
   const [publicKey, setPublicKeyState] = useState<string | null>(null);
   const [userData, setUserData] = useState<UserData | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
-
-  console.log(userData);
 
   const setPublicKey = (key: string | null) => {
     setPublicKeyState(key);
@@ -38,13 +32,9 @@ export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
   };
 
   const fetchUserData = async (key: string, data?: UserData) => {
-    // console.log("this ran");
     setIsFetching(true);
 
-    const url = `${baseUrl}/${key}/activity-summary`; // Add address as a query parameter
-    const response = await axios.get(url); // Axios GET request
-
-    setUserData(response.data);
+    setUserData(data);
     setIsFetching(false);
     setPublicKey(key);
   };
@@ -56,7 +46,7 @@ export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
         fetchUserData(storedPublicKey);
       }
     }
-  }, [publicKey]);
+  }, []);
 
   return (
     <PublicKeyContext.Provider
