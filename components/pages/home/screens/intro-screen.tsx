@@ -5,13 +5,11 @@ export function IntroScreen() {
   return (
     <BaseScene
       backgroundImage="/backgrounds/black-grunge-bg.png"
-      className="text-white"
+      className="text-white w-full"
       isCenter
     >
       {/* Main Content */}
-      <div className="relative flex-1 flex items-center justify-center p-6 z-10 ">
-        <StellarFullLogo />
-      </div>
+      <StellarFullLogo className="h-10 w-full" />
     </BaseScene>
   );
 }

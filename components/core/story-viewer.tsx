@@ -13,6 +13,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "../ui/button";
 import { ShareModal } from "./share-modal";
 import { getStoryStyles } from "@/utlis";
+import { StoryInputWrapper } from "./story-input-wrapper";
 
 interface Story {
   id: string;
@@ -40,6 +41,8 @@ export function StoryViewer({ stories }: StoryViewerProps) {
     handleDragEnd,
   } = useStoryState(stories);
   const storyStyles = getStoryStyles(currentIndex);
+
+  const isWalletInput = stories[currentIndex].id === "wallet-input";
 
   useEffect(() => {
     if (stories[currentIndex]?.id === "year-stats") {
@@ -115,16 +118,19 @@ export function StoryViewer({ stories }: StoryViewerProps) {
           <button
             className="absolute left-0 top-0 w-16 opacity-0 z-20 h-full"
             onClick={goToPreviousStory}
+            type="button"
           />
         )}
         <button
           className="absolute right-0 top-0 w-16 opacity-0 z-20 h-[80vh]"
           onClick={goToNextStory}
           disabled={isNextStoryLocked}
+          type="button"
         />
       </>
     );
   };
+
   return (
     <div className="fixed flex flex-col inset-0 bg-muted">
       <div className="relative h-full w-full max-w-md mx-auto">
@@ -202,7 +208,9 @@ export function StoryViewer({ stories }: StoryViewerProps) {
               className="absolute inset-0 w-full h-full"
             >
               <div className="relative h-full w-full z-40 overflow-hidden">
-                {stories[currentIndex].component}
+                <StoryInputWrapper isWalletInput={isWalletInput}>
+                  {stories[currentIndex].component}
+                </StoryInputWrapper>
 
                 {currentIndex === stories.length - 1 && (
                   <button

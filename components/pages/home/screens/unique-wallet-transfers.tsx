@@ -42,11 +42,13 @@ export function UniqueWalletTransfers() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="font-bold">Largest XLM Transaction:</div>
+            <div className="font-bold text-sm sm:text-base">
+              Largest XLM Transaction:
+            </div>
             <div className="space-y-2 capitalize">
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Amount</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {formatAmount(
                     userData?.top_largest_xlm?.[0]?.xlm_amount || 0
                   )}{" "}
@@ -55,7 +57,7 @@ export function UniqueWalletTransfers() {
               </div>
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Type</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {userData?.top_largest_xlm?.[0]?.xlm_op_type_str
                     .split("_")
                     .join(" ")}
@@ -63,13 +65,13 @@ export function UniqueWalletTransfers() {
               </div>
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Date</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {formatDateMY(userData?.top_largest_xlm?.[0]?.tx_time)}
                 </span>
               </div>
               <div className="space-y-1 hidden flex-col">
                 <span className="text-muted-foreground text-xs">TX ID</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {truncateId(userData?.top_largest_xlm?.[0]?.tx_id)}
                 </span>
               </div>
@@ -83,11 +85,13 @@ export function UniqueWalletTransfers() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="font-bold">Largest Non-XLM Transaction:</div>
+            <div className="font-bold text-sm sm:text-base">
+              Largest Non-XLM Transaction:
+            </div>
             <div className="space-y-2 capitalize">
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Amount</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {formatAmount(
                     userData?.top_largest_nonxlm?.[0]?.nonxlm_amount || 0
                   )}{" "}
@@ -96,19 +100,19 @@ export function UniqueWalletTransfers() {
               </div>
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Type</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {userData?.top_largest_nonxlm?.[0]?.nonxlm_op_type_str}
                 </span>
               </div>
               <div className="space-y-1 flex flex-col">
                 <span className="text-muted-foreground text-xs">Date</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {formatDateMY(userData?.top_largest_nonxlm?.[0]?.tx_time)}
                 </span>
               </div>
               <div className="space-y-1 hidden flex-col">
                 <span className="text-muted-foreground text-xs">TX ID</span>
-                <span className="font-medium">
+                <span className="font-medium text-sm sm:text-base">
                   {truncateId(userData?.top_largest_nonxlm?.[0]?.tx_id)}
                 </span>
               </div>

@@ -28,7 +28,7 @@ export function NetPosition() {
     >
       <div className="relative w-full max-w-md space-y-8 mt-20">
         <motion.h2
-          className="text-4xl font-bold font-schabo px-4"
+          className="text-2xl sm:text-4xl font-bold font-schabo px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -41,11 +41,11 @@ export function NetPosition() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <span className="text-muted-foreground font-semibold px-4">
+            <span className="text-muted-foreground sm:text-base text-sm font-medium sm:font-semibold px-4">
               Sent
             </span>
             <div
-              className="w-auto"
+              className="w-fit"
               style={{
                 backgroundImage: `url('/backgrounds/yellow-figure-bg.svg')`,
                 backgroundPosition: "left",
@@ -54,7 +54,7 @@ export function NetPosition() {
                 padding: "0rem 1rem",
               }}
             >
-              <h3 className="text-[63px] font-bold font-schabo w-fit leading-tight">
+              <h3 className="text-4xl sm:text-[63px] font-bold font-schabo w-fit leading-tight">
                 {formatNumber(userData?.total_sent_xlm)?.toLocaleString()} XLM
               </h3>
             </div>
@@ -66,10 +66,10 @@ export function NetPosition() {
             transition={{ delay: 0.4 }}
             className=" px-4"
           >
-            <span className="text-muted-foreground font-semibold">
+            <span className="text-muted-foreground sm:text-base text-sm font-medium sm:font-semibold">
               Received
             </span>
-            <h3 className="text-[63px] font-schabo font-bold leading-tight">
+            <h3 className="text-4xl sm:text-[63px] font-schabo font-bold leading-tight">
               {formatNumber(userData?.total_received_xlm)?.toLocaleString()} XLM
             </h3>
           </motion.div>
@@ -80,10 +80,10 @@ export function NetPosition() {
             transition={{ delay: 0.6 }}
             className="px-4"
           >
-            <span className="text-muted-foreground font-semibold">
+            <span className="text-muted-foreground sm:text-base text-sm font-medium sm:font-semibold">
               Net Position
             </span>
-            <h3 className="text-[63px] font-schabo font-bold leading-tight">
+            <h3 className="text-4xl sm:text-[63px] font-schabo font-bold leading-tight">
               {netPosition?.toLocaleString()} XLM
             </h3>
           </motion.div>

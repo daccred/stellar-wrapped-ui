@@ -36,7 +36,7 @@ export function FrequentWallet() {
             transition={{ delay: 0.2 }}
           >
             <motion.div
-              className="text-primary"
+              className="text-primary text-sm sm:text-base"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -76,10 +76,14 @@ export function FrequentWallet() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <div className="text-primary">Top Trading Activity</div>
+            <div className="text-primary text-sm sm:text-base">
+              Top Trading Activity
+            </div>
             <div className="space-y-2 text-muted-foreground text-sm capitalize">
               <div className="space-y-1 flex flex-col">
-                <span className="text-muted-foreground">Buying</span>
+                <span className="text-muted-foreground text-sm sm:text-base">
+                  Buying
+                </span>
                 <span className="text-foreground font-semibold">
                   {formatAmount(
                     userData?.top_nonxlm_buying?.[0]?.total_buying || 0
@@ -88,7 +92,9 @@ export function FrequentWallet() {
                 </span>
               </div>
               <div className="space-y-1 flex flex-col">
-                <span className="text-muted-foreground">Selling</span>
+                <span className="text-muted-foreground text-sm sm:text-base">
+                  Selling
+                </span>
                 <span className="text-foreground font-semibold">
                   {formatAmount(
                     userData?.top_nonxlm_selling?.[0]?.total_selling || 0
@@ -106,10 +112,14 @@ export function FrequentWallet() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
           >
-            <div className="text-primary">Top Send/Receive Activity</div>
+            <div className="text-primary text-sm sm:text-base">
+              Top Send/Receive Activity
+            </div>
             <div className="space-y-2 text-muted-foreground text-sm capitalize">
               <div className="space-y-1 flex flex-col">
-                <span className="text-muted-foreground">Sent</span>
+                <span className="text-muted-foreground text-sm sm:text-base">
+                  Sent
+                </span>
                 <span className="text-foreground font-semibold">
                   {formatAmount(
                     userData?.top_nonxlm_sent?.[0]?.total_sent || 0
@@ -118,7 +128,9 @@ export function FrequentWallet() {
                 </span>
               </div>
               <div className="space-y-1 flex flex-col">
-                <span className="text-muted-foreground">Received</span>
+                <span className="text-muted-foreground text-sm sm:text-base">
+                  Received
+                </span>
                 <span className="text-foreground font-semibold">
                   {formatAmount(
                     userData?.top_nonxlm_received?.[0]?.total_received || 0

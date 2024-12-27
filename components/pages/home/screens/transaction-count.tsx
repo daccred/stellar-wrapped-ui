@@ -41,7 +41,7 @@ export function TransactionCount() {
           <h2 className="text-base font-semibold">Total Transaction Count</h2>
 
           <motion.div
-            className="text-7xl sm:text-[96px] font-bold font-schabo text-primary"
+            className="text-5xl sm:text-[96px] font-bold font-schabo text-primary"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{
@@ -70,7 +70,7 @@ export function TransactionCount() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="text-base font-medium pb-4 border-b px-4 border-white">
+          <h3 className="text-sm sm:text-base font-medium pb-4 border-b px-4 border-white">
             Transactions by Category
           </h3>
           <div className="space-y-3 px-4">

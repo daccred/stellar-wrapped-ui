@@ -73,7 +73,7 @@ export function FirstTransaction() {
             className="space-y-4"
           >
             <motion.div
-              className="text-6xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums"
+              className="text-5xl sm:text-[96px] font-bold font-schabo text-primary tracking-wide tabular-nums"
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{
@@ -85,7 +85,7 @@ export function FirstTransaction() {
             >
               <motion.span>{firstDate.day}</motion.span>
               <motion.span
-                className="text-4xl sm:text-6xl font-medium ml-2"
+                className="text-3xl sm:text-6xl font-medium ml-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
@@ -95,7 +95,7 @@ export function FirstTransaction() {
             </motion.div>
 
             <motion.div
-              className="sm:text-lg text-foreground font-medium"
+              className="text-sm sm:text-base text-foreground font-medium"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 }}

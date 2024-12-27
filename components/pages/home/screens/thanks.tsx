@@ -21,23 +21,88 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const gradients = {
+  purple:
+    "bg-gradient-to-br from-purple-500/10 to-purple-500/20 hover:from-purple-500/20 hover:to-purple-500/30",
+  blue: "bg-gradient-to-br from-blue-500/10 to-blue-500/20 hover:from-blue-500/20 hover:to-blue-500/30",
+  green:
+    "bg-gradient-to-br from-green-500/10 to-green-500/20 hover:from-green-500/20 hover:to-green-500/30",
+  yellow:
+    "bg-gradient-to-br from-yellow-500/10 to-yellow-500/20 hover:from-yellow-500/20 hover:to-yellow-500/30",
+  pink: "bg-gradient-to-br from-pink-500/10 to-pink-500/20 hover:from-pink-500/20 hover:to-pink-500/30",
+  orange:
+    "bg-gradient-to-br from-orange-500/10 to-orange-500/20 hover:from-orange-500/20 hover:to-orange-500/30",
+};
+
 const activeComponents = [
-  { id: "largest-transaction", title: "LargestTransaction", icon: ArrowUpDown },
-  { id: "net-position", title: "NetPosition", icon: BarChart3 },
-  { id: "transaction-count", title: "TransactionCount", icon: Hash },
-  { id: "frequent-wallet", title: "FrequentWallet", icon: Users },
+  {
+    id: "largest-transaction",
+    title: "Largest Transaction",
+    icon: ArrowUpDown,
+    gradient: gradients.purple,
+  },
+  {
+    id: "net-position",
+    title: "Net Position",
+    icon: BarChart3,
+    gradient: gradients.blue,
+  },
+  {
+    id: "transaction-count",
+    title: "Transaction Count",
+    icon: Hash,
+    gradient: gradients.green,
+  },
+  {
+    id: "frequent-wallet",
+    title: "Frequent Wallet",
+    icon: Users,
+    gradient: gradients.yellow,
+  },
   {
     id: "unique-wallet-transfers",
-    title: "UniqueWalletTransfers",
+    title: "Unique Transfers",
     icon: Wallet,
+    gradient: gradients.pink,
   },
-  { id: "starting-balance", title: "StartingBalance", icon: Coins },
-  { id: "most-active-month", title: "MostActiveMonth", icon: Calendar },
-  { id: "time-on-chain", title: "TimeOnChain", icon: Clock },
-  { id: "first-transaction", title: "FirstTransaction", icon: CalendarCheck },
-  { id: "last-transaction", title: "LastTransaction", icon: CalendarX },
-  { id: "profit-loss", title: "ProfitLoss", icon: TrendingUp },
+  {
+    id: "starting-balance",
+    title: "Starting Balance",
+    icon: Coins,
+    gradient: gradients.orange,
+  },
+  {
+    id: "most-active-month",
+    title: "Most Active Month",
+    icon: Calendar,
+    gradient: gradients.purple,
+  },
+  {
+    id: "time-on-chain",
+    title: "Time On Chain",
+    icon: Clock,
+    gradient: gradients.blue,
+  },
+  {
+    id: "first-transaction",
+    title: "First Transaction",
+    icon: CalendarCheck,
+    gradient: gradients.green,
+  },
+  {
+    id: "last-transaction",
+    title: "Last Transaction",
+    icon: CalendarX,
+    gradient: gradients.yellow,
+  },
+  {
+    id: "profit-loss",
+    title: "Profit & Loss",
+    icon: TrendingUp,
+    gradient: gradients.pink,
+  },
 ];
+
 export function Thanks() {
   const [shareListOpen, setShareListOpen] = useState<boolean>(false);
   const [selectedStory, setSelectedStory] = useState<string | null>(null);
@@ -50,13 +115,13 @@ export function Thanks() {
     <BaseScene backgroundImage="/backgrounds/dotted-yellow-bg.png" isCenter>
       {!shareListOpen && (
         <motion.div
-          className="w-full space-y-6 bg-black rounded p-6"
+          className="w-full space-y-4 bg-black rounded p-6"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="text-[64px] font-bold font-schabo text-white leading-[1.1]"
+            className="text-4xl sm:text-[64px] font-bold font-schabo text-white leading-[1.1]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -85,7 +150,7 @@ export function Thanks() {
             transition={{ delay: 0.6 }}
           >
             Share Wrapped
-            <span className="text-base p-2 rounded-full bg-primary text-black">
+            <span className="text-base p-1.5 rounded-full bg-primary text-black">
               <ArrowRight className="w-5 h-5" />
             </span>
           </motion.button>
@@ -96,29 +161,33 @@ export function Thanks() {
       <AnimatePresence>
         {shareListOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="flex flex-col gap-4 items-center justify-center p-4 rounded bg-black relative z-50"
+            exit={{ opacity: 0, y: 20 }}
+            className="w-full bg-black rounded-2xl p-4 border border-white/10"
           >
-            <div className="grid grid-cols-2 gap-4 overflow-y-auto [&::-webkit-scrollbar]:hidden place-content-center">
-              {activeComponents.map((story, index) => (
+            <div className="grid grid-cols-3 gap-3 max-h-[70vh] overflow-y-auto scrollbar-hide">
+              {activeComponents.map((component, index) => (
                 <motion.div
-                  key={story.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  key={component.id}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={cn("flex flex-col items-center justify-center", {
-                    "col-span-2": index === 10,
-                  })}
+                  transition={{ delay: index * 0.05 }}
+                  className={cn("group relative", {})}
                 >
                   <Button
-                    variant="outline"
-                    className="w-full text-xs bg-white/10 border-white/20 backdrop-blur-sm text-white hover:bg-white/20 flex flex-col items-center justify-center h-20 rounded-xl"
-                    onClick={() => handleShare(story.id)}
+                    variant="ghost"
+                    className={cn(
+                      "w-full h-auto p-4 flex flex-col items-center gap-2 rounded-xl border border-white/5",
+                      "transition-all duration-300 ease-out",
+                      component.gradient
+                    )}
+                    onClick={() => handleShare(component.id)}
                   >
-                    <story.icon className="w-5 h-5 mr-3" />
-                    {story.title}
+                    <component.icon className="w-4 h-4 transition-opacity" />
+                    <span className="text-[9px] font-medium transition-opacity">
+                      {component.title}
+                    </span>
                   </Button>
                 </motion.div>
               ))}

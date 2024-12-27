@@ -29,7 +29,7 @@ export function LargestTransaction({}) {
           <h2 className="sm:text-xl font-medium">Your Largest Transaction</h2>
 
           <motion.div
-            className="text-6xl sm:text-[96px] font-bold font-schabo text-primary"
+            className="text-5xl sm:text-[96px] font-bold font-schabo text-primary"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{
@@ -53,14 +53,11 @@ export function LargestTransaction({}) {
             <div className="flex flex-row items-center justify-between w-full">
               <div className="flex items-center gap-1">
                 <Icons.USD />
-                <span className="font-semibold uppercase">
+                <span className="text-sm sm:text-base font-medium sm:font-semibold uppercase">
                   {formatNumber(largestNonxlm?.nonxlm_amount)}{" "}
                   {largestNonxlm?.nonxlm_asset_code}
                 </span>
               </div>
-              <span className="text-sm">
-                {formatDateMDY(largestNonxlm?.tx_time || "")}
-              </span>
             </div>
           </motion.div>
         </motion.div>
@@ -71,7 +68,7 @@ export function LargestTransaction({}) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="sm:text-lg font-medium">
+          <h3 className="text-sm sm:text-lg font-medium">
             Most Active Transaction Day
           </h3>
           <div className="space-y-3 text-xs">
