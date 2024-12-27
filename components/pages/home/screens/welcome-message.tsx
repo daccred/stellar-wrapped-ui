@@ -19,7 +19,7 @@ export function WelcomeMessage() {
       />
 
       <motion.h1
-        className="text-3xl sm:text-4xl font-bold text-white text-start mb-4 z-50"
+        className="text-xl sm:text-4xl font-bold text-white text-start mb-4 z-50"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.8 }}

@@ -77,7 +77,7 @@ export function StartingBalance() {
             </motion.div>
 
             <motion.div
-              className="sm:text-base text-white font-medium"
+              className="text-sm sm:text-base text-white font-medium"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}

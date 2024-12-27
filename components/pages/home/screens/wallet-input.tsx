@@ -73,7 +73,7 @@ const WalletInput = () => {
   }
   return (
     <BaseScene backgroundImage="/backgrounds/home-bg.png" isCenter>
-      <div className="relative h-full w-full z-40 flex flex-col items-center justify-center -mt-20">
+      <div className="relative h-full w-full z-40 flex flex-col items-center justify-center">
         <div className="space-y-4 max-w-[500px]">
           <h1
             className="text-[50px] leading-[1.1] sm:text-[61px] font-schabo sm:leading-[60px] text-muted font-bold tracking-wide"

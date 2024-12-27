@@ -76,10 +76,18 @@ const DATA_POINTS = [
 ];
 
 export function LoaderFallback({ isClient }: { isClient?: boolean }) {
-  const [currentSetIndex, setCurrentSetIndex] = useState(0);
+  const [currentSetIndex, setCurrentSetIndex] = useState<number>(0);
   const [currentValues, setCurrentValues] = useState<number[]>([43, 30, 12]);
   const duration = 1500; // 1.5 seconds per data point
   const pauseDuration = 500; // 0.5 second pause between sets
+
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsSmallScreen(window.innerHeight <= 700);
+    }
+  }, []);
 
   useEffect(() => {
     const startIndex = currentSetIndex * 2;
@@ -129,17 +137,16 @@ export function LoaderFallback({ isClient }: { isClient?: boolean }) {
     DATA_POINTS[(startIndex + 1) % DATA_POINTS.length],
   ];
 
-  const isSmallScreen =
-    typeof window !== "undefined" && window.innerHeight <= 700;
-
   return (
     <div className="fixed h-screen inset-0 flex flex-col bg-muted">
-      <div className="relative h-full w-full flex flex-col max-w-md mx-auto items-start justify-center space-y-8 pt-16">
-        <div
-          className="absolute inset-0 bg-cover bg-no-repeat"
-          style={{
-            backgroundImage: `url('/backgrounds/yellow-grunge-bg.png')`,
-          }}
+      <div className="relative h-full w-full flex flex-col max-w-md mx-auto items-start justify-center space-y-8 pt-20">
+        <Image
+          src="/backgrounds/yellow-grunge-bg.png"
+          alt="Background image"
+          width={240}
+          height={80}
+          className="absolute w-full h-full inset-0"
+          unoptimized
         />
         <Image
           src="/stellar-logo.svg"
@@ -153,40 +160,28 @@ export function LoaderFallback({ isClient }: { isClient?: boolean }) {
           <div className="flex flex-col items-start">
             <span
               className={cn(
-                "font-schabo text-black",
-                isSmallScreen
-                  ? "text-[60px] leading-[65px]"
-                  : "text-[80px] sm:text-[120px] leading-[1]"
+                "font-schabo text-black text-[60px] sm:text-[120px] leading-[1]"
               )}
             >
               YOUR
             </span>
             <span
               className={cn(
-                "font-schabo text-black",
-                isSmallScreen
-                  ? "text-[60px] leading-[65px]"
-                  : "text-[80px] sm:text-[120px] leading-[1]"
+                "font-schabo text-black text-[60px] sm:text-[120px] leading-[1]"
               )}
             >
               2024
             </span>
             <span
               className={cn(
-                "font-schabo text-black",
-                isSmallScreen
-                  ? "text-[60px] leading-[65px]"
-                  : "text-[80px] sm:text-[120px] leading-[1]"
+                "font-schabo text-black text-[60px] sm:text-[120px] leading-[1]"
               )}
             >
               STELLAR
             </span>
             <span
               className={cn(
-                "font-schabo text-black",
-                isSmallScreen
-                  ? "text-[60px] leading-[65px]"
-                  : "text-[80px] sm:text-[120px] leading-[1]"
+                "font-schabo text-black text-[60px] sm:text-[120px] leading-[1]"
               )}
             >
               WRAPPED
@@ -194,7 +189,7 @@ export function LoaderFallback({ isClient }: { isClient?: boolean }) {
           </div>
         </div>
         {!isClient && (
-          <div className="w-full space-y-5 absolute bottom-0 z-50 bg-transparent p-6 pb-14 text-muted">
+          <div className="w-full space-y-5 absolute bottom-10 z-50 bg-transparent p-6 pb-14 text-muted">
             <div className="text-muted-foreground text-sm sm:text-base mb-4">
               Hang on while we generate your wrapped...
             </div>
@@ -210,7 +205,7 @@ export function LoaderFallback({ isClient }: { isClient?: boolean }) {
             ))}
           </div>
         )}
-      </div>{" "}
+      </div>
       {/* Footer */}
       <div className="relative w-full p-4 flex items-center justify-center text-center gap-2 z-50 bg-white max-w-md mx-auto">
         <p className="text-xs text-black">Powered by </p>
